@@ -1,0 +1,782 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/font-awesome.min.css")
+
+    <script src="~/Scripts/Chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/CSS/header.css" rel="stylesheet" />
+    <link href="~/Content/CSS/sidenav.css" rel="stylesheet" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <link href="~/Scripts/dist/mc-calendar.min.css" rel="stylesheet" />
+    <script src="~/Scripts/dist/mc-calendar.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <script src="~/Scripts/Javascript/sidenav.js"></script>
+    @*<script src="~/Scripts/sweetalert.min.js"></script>*@
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body id="body-pd">
+    <div>
+        <header class="header justify-content-between" id="header">
+            <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
+            @*<div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>*@
+            <div class="ms-auto d-flex">
+                <div>
+                    <a href="/" id="dropdownMenuButton" class="header-icon align-items-center justify-content-center ms-2 cursor-pointer" data-bs-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                        <img src="https://source.unsplash.com/WNoLnJo7tS8" class="header_img profile-image rounded-circle" alt="Sulav Shrestha">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
+                            <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
+                                <span class="me-2">
+                                    <img src="https://source.unsplash.com/WNoLnJo7tS8" class="rounded-circle profile-image" alt="Sulav Shrestha">
+                                </span>
+                                <div class="info-card-text">
+                                    <div class="fs-lg text-truncate text-truncate-lg">Sulav Shrestha</div>
+                                    <span class="text-truncate text-truncate-md opacity-80">crewsondestiny5@gmail.com</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider m-0"></div>
+                        <a href="@Url.Action("ChangePassword", "AccountLogin")" class="dropdown-item">
+                            Change Password
+                        </a>
+                        <div class="dropdown-divider m-0"></div>
+
+                        <a href="@Url.Action("Logout", "AccountLogin")" class="dropdown-item fw-500 pt-3 pb-3">
+                            <i class='bx bx-log-out nav_icon'></i>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="l-navbar primary-nav" id="nav-bar">
+            @*@if (User.Identity.IsAuthenticated)
+        {*@
+            <div class="page-logo nav_list">
+                <a href="/" class="nav_logo nav_icon page-logo-link d-flex align-items-center position-relative">
+                    <img src="../../../../Scripts/Client/assets/Images/logo3.png" alt="Review Zone" aria-roledescription="logo">
+                    <span class="nav_logo-name page-logo-text mr-1 not-show" id="page-logo">ReviewZone</span>
+                </a>
+            </div>
+            <nav class="nav">
+
+                <div class="info-card not-show" id="info-card">
+                    <img src="https://source.unsplash.com/WNoLnJo7tS8" class="profile-image rounded-circle" alt="{{userName}}">
+                    <div class="info-card-text">
+                        <a href="/" class="d-flex align-items-center" style="background: none; color: white !important;">
+                            <span class="text-truncate text-truncate-sm d-inline-block">
+                                Sulav Shrestha
+                            </span>
+                        </a>
+                    </div>
+                    <img src="../../../../Scripts/Client/assets/Images/cover-2-lg.png" class="cover" alt="cover" />
+                </div>
+                <div class="accordion accordion-flush" id="accordionFlushExample" style="width: 100%;">
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <a href="/">
+                                <button class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    <i class="fas fa-home nav_icon"></i><span class="nav-link-text nav_name">Dashboard</span>
+                                </button>
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                <i class="fas fa-user nav_icon"></i><span class="nav-link-text nav_name">Customers</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Customer")">
+                                    <button class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Add Customer
+                                    </button>
+                                </a>
+                            </div>
+                            @*@if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("evaluator"))
+                            {
+                                <div class="accordion-body">
+                                    <a href="@Url.Action("GetAllCustomer", "Customer")">
+                                        <button [routerLink]="['/CustomerList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            List Customer
+                                        </button>
+                                    </a>
+                                </div>
+                            }
+                        }*@
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllCustomer", "Customer")">
+                                    <button [routerLink]="['/CustomerList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        List Customer
+                                    </button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                <i class="fas fa-calculator nav_icon"></i>
+                                <span class="nav-link-text nav_name">Accounting</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseThree" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Deposit")">
+                                    <button [routerLink]="['/Accounts']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        New Deposit
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Expense")">
+                                    <button [routerLink]="['/Accounts']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        New Expense
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllVoucher", "Voucher")">
+                                    <button [routerLink]="['/Vouchers']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Vouchers
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllAccount", "Account")">
+                                    <button [routerLink]="['/AccountList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Accounts
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Account")">
+                                    <button [routerLink]="['/Accounts']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        New Account
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                                <i class="fas fa-wallet nav_icon"></i>
+                                <span class="nav-link-text nav_name">Sales</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseFour" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllInvoice", "Invoice")">
+                                    <button [routerLink]="['/Invoices']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Invoice
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Invoice")">
+                                    <button [routerLink]="['/NewInvoice']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        New Invoice
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllPayments", "Payment")">
+                                    <button [routerLink]="['/Payments']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Payments
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                                <i class="fas fa-shopping-bag nav_icon"></i>
+                                <span class="nav-link-text nav_name">Orders</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseFive" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllOrder", "Order")">
+                                    <button [routerLink]="['/OrderList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        List All Orders
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Order")">
+                                    <button [routerLink]="['/Orders']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Add New Orders
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingSix">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                                <i class="fab fa-product-hunt nav_icon"></i>
+                                <span class="nav-link-text nav_name">Product</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseSix" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllProduct", "Product")">
+                                    <button [routerLink]="['/ProductList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Products
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Product")">
+                                    <button [routerLink]="['/Products']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Add Products
+                                    </button>
+                                </a>s
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingSeven">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
+                                <i class="fas fa-tasks nav_icon"></i>
+                                <span class="nav-link-text nav_name">Task</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseSeven" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Create", "Task")">
+                                    <button [routerLink]="['/Tasks']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Add New Task
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllTask", "Task")">
+                                    <button [routerLink]="['/TaskList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        List All Tasks
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingEight">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
+                                <i class="fas fa-users nav_icon"></i>
+                                <span class="nav-link-text nav_name">Employee</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseEight" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("GetAllEmployee", "Employee")">
+                                    <button [routerLink]="['/EmployeeList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Employees
+                                    </button>
+                                </a>
+                            </div>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <div class="accordion-body">
+                                    <a href="@Url.Action("Create", "Employee")">
+                                        <button [routerLink]="['/Employees']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            Add Employees
+                                        </button>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingNine">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+                                <i class="fas fa-user-secret nav_icon"></i>
+                                <span class="nav-link-text nav_name">Evaluator</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseNine" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            @if (User.IsInRole("admin,evaluator"))
+                            {
+                                <div class="accordion-body">
+                                    <a href="@Url.Action("GetAllEvaluator", "Evaluator")">
+                                        <button [routerLink]="['/EvaluatorList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            Evaluators
+                                        </button>
+                                    </a>
+                                </div>
+                            }
+                            @if (User.IsInRole("admin"))
+                            {
+                                <div class="accordion-body">
+                                    <a href="@Url.Action("Create", "Evaluator")">
+                                        <button [routerLink]="['/Evaluator']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            Add New Evaluators
+                                        </button>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @if (User.IsInRole("admin,evaluator"))
+                    {
+                        <div class="nav_list accordion-item">
+                            <h2 class="accordion-header" id="flush-headingEle">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEle" aria-expanded="false" aria-controls="flush-collapseEle">
+                                    <i class="fas fa-user-check"></i><span class="nav-link-text nav_name">Evaluation</span>
+                                </button>
+                            </h2>
+                            <div id="flush-collapseEle" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <a href="@Url.Action("GetAllEvaluation", "Evaluation")">
+                                        <button [routerLink]="['/EvaluatorList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            Evaluators
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="accordion-body">
+                                    <a href="@Url.Action("Create", "Evaluation")">
+                                        <button [routerLink]="['/Evaluator']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                            Add New Evaluators
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="nav_list accordion-item">
+                        <h2 class="accordion-header" id="flush-headingTen">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTen" aria-expanded="false" aria-controls="flush-collapseTen">
+                                <i class="fas fa-chart-line nav_icon"></i>
+                                <span class="nav-link-text nav_name">Reports</span>
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTen" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Report", "ReportInvoice")">
+                                    <button [routerLink]="['/ReportInvoices']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Invoices
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Report", "ReportPayment")">
+                                    <button [routerLink]="['/ReportPayments']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Payments
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="@Url.Action("Report", "ReportForecast")">
+                                    <button [routerLink]="['/ReportForecast']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        Sales Forecast
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            @*}*@
+        </div>
+    </div>
+    <!--Container Main start-->
+    <div class="height-100 bg-light">
+        @RenderBody()
+    </div>
+    <!--Container Main end-->
+    @*<mat-toolbar>
+            <mat-toolbar-row class="justify-content-between">
+                <button mat-icon-button (click)="toggleSidebar()" [ngClass]="{'notExpanded': isExpanded}" id="apps-btn">
+                    <mat-icon>apps</mat-icon>
+                </button>
+                <div class="ms-auto d-flex">
+                    <div>
+                        <a id="dropdownMenuButton" class="header-icon align-items-center justify-content-center ms-2 cursor-pointer" data-bs-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://source.unsplash.com/WNoLnJo7tS8" class="profile-image rounded-circle" alt="Sulav Shrestha">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-header bg-trans-gradient d-flex flex-row py-4 rounded-top">
+                                <div class="d-flex flex-row align-items-center mt-1 mb-1 color-white">
+                                    <span class="me-2">
+                                        <img src="https://source.unsplash.com/WNoLnJo7tS8" class="rounded-circle profile-image" alt="Sulav Shrestha">
+                                    </span>
+                                    <div class="info-card-text">
+                                        <div class="fs-lg text-truncate text-truncate-lg">Sulav Shrestha</div>
+                                        <span class="text-truncate text-truncate-md opacity-80">crewsondestiny5@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider m-0"></div>
+                            <a [routerLink]="['/EditProfile']" class="dropdown-item">
+                                Edit Profile
+                            </a>
+                            <a [routerLink]="['/ChangePassword']" class="dropdown-item">
+                                Change Password
+                            </a>
+                            <div href="/Home/Login" class="dropdown-divider m-0"></div>
+                            <a class="dropdown-item fw-500 pt-3 pb-3"> Logout </a>
+                        </div>
+                    </div>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>*@
+
+    @*<mat-nav-list>
+
+            <div class="page-logo">
+                <a href="" class="page-logo-link d-flex align-items-center position-relative">
+                    <img src="../../../../Scripts/Client/assets/Images/logo3.png" alt="Review Zone" aria-roledescription="logo">
+                    <span class="page-logo-text mr-1">Review Zone</span>
+                </a>
+            </div>
+            <div class="info-card">
+                <img src="https://source.unsplash.com/WNoLnJo7tS8" class="profile-image rounded-circle" alt="{{userName}}">
+                <div class="info-card-text">
+                    <a [routerLink]="['/']" class="d-flex align-items-center" style="background: none; color: white !important;">
+                        <span class="text-truncate text-truncate-sm d-inline-block">
+                            {{userName}}
+                        </span>
+                    </a>
+                </div>
+                <img src="../../../../Scripts/Client/assets/Images/cover-2-lg.png" class="cover" alt="cover" />
+            </div>
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button [routerLink]="['/']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            <i class="fas fa-home"></i><span class="nav-link-text nav_name">Dashboard</span>
+                        </button>
+                    </h2>
+                </div>
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                            <i class="fas fa-user"></i><span class="nav-link-text nav_name">Customers</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse disabled" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Customer")">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Add Customer
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllCustomer", "Customer")">
+                                <button [routerLink]="['/CustomerList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    List Customer
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                            <i class="fas fa-calculator"></i>
+                            <span class="nav-link-text nav_name">Accounting</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllVoucher", "Voucher")">
+                                <button [routerLink]="['/Vouchers']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Vouchers
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllAccount", "Account")">
+                                <button [routerLink]="['/AccountList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Accounts
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Account")">
+                                <button [routerLink]="['/Accounts']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    New Accounts
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                            <i class="fas fa-wallet"></i>
+                            <span class="nav-link-text nav_name">Sales</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseFour" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllInvoice", "Invoice")">
+                                <button [routerLink]="['/Invoices']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Invoice
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Invoice")">
+                                <button [routerLink]="['/NewInvoice']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    New Invoice
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllPayments", "Payment")">
+                                <button [routerLink]="['/Payments']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Payments
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="nav-link-text nav_name">Orders</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseFive" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllOrder", "Order")">
+                                <button [routerLink]="['/OrderList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    List All Orders
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Order")">
+                                <button [routerLink]="['/Orders']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Add New Orders
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                            <i class="fab fa-product-hunt"></i>
+                            <span class="nav-link-text nav_name">Product</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseSix" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllProduct", "Product")">
+                                <button [routerLink]="['/ProductList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Products
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Product")">
+                                <button [routerLink]="['/Products']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Add Products
+                                </button>
+                            </a>s
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
+                            <i class="fas fa-tasks"></i>
+                            <span class="nav-link-text nav_name">Task</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseSeven" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Task")">
+                                <button [routerLink]="['/Tasks']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Add New Task
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllTask", "Task")">
+                                <button [routerLink]="['/TaskList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    List All Tasks
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingEight">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-link-text nav_name">Employee</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseEight" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllEmployee", "Employee")">
+                                <button [routerLink]="['/EmployeeList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Employees
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Create", "Employee")">
+                                <button [routerLink]="['/Employees']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Add Employees
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingNine">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+                            <i class="fas fa-user-secret"></i>
+                            <span class="nav-link-text nav_name">Evaluator</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseNine" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllEvaluator", "Evaluator")">
+                                <button [routerLink]="['/EvaluatorList']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Evaluators
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("GetAllEvaluator", "Evaluator")">
+                                <button [routerLink]="['/Evaluator']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Add New Evaluators
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav_list accordion-item">
+                    <h2 class="accordion-header" id="flush-headingTen">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTen" aria-expanded="false" aria-controls="flush-collapseTen">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="nav-link-text nav_name">Reports</span>
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTen" class="accordin-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Report", "ReportInvoice")">
+                                <button [routerLink]="['/ReportInvoices']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Invoices
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Report", "ReportPayment")">
+                                <button [routerLink]="['/ReportPayments']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Payments
+                                </button>
+                            </a>
+                        </div>
+                        <div class="accordion-body">
+                            <a href="@Url.Action("Report", "ReportForecast")">
+                                <button [routerLink]="['/ReportForecast']" class="accordion-button collapsed disabled" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Sales Forecast
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-nav-list>*@
+
+
+    <!--=======
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    </head>
+    <body ng-app="">
+
+        >>>>>>> 3977a3a2948ba4eb2fff75187bf89db1a26114d5-->
+    @*<div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("About", "About", "Home")</li>
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container body-content">
+
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>
+        </div>*@
+    <!--<<<<<<< HEAD-->
+    @Scripts.Render("~/bundles/jquery")
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+        $(document).ready(function () {
+            $('#dataTable1').DataTable();
+        });
+        $(document).ready(function () {
+            $('#dataTable2').DataTable();
+        });
+        $(document).ready(function () {
+            $('#dataTable3').DataTable();
+        });
+    </script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/Theme/js/demo/datatables-demo.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

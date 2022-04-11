@@ -1,0 +1,54 @@
+﻿@model ReviewZone.Models.OrderModel
+
+@{ ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<link href="~/Content/CSS/OrderDetails.css" rel="stylesheet" />
+<main id="clx-page-content" role="main" class="page-content ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-container">
+                    <div class="panel-content">
+                        <h3 style="color: #2f96f3;">Order # @Html.DisplayFor(model => model.Order_ID)</h3>
+                        <hr>
+                        <a class="btn btn-primary waves-effect waves-themed"> Accept </a>
+                        <a class="btn btn-warning waves-effect waves-themed"> Pending </a>
+                        <a class="btn btn-info waves-effect waves-themed"> Cancel </a>
+                        <a class="btn btn-danger waves-effect waves-themed"> Delete </a>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="well">
+                                    <h4>Order Number - @Html.DisplayFor(model => model.Order_ID)</h4>
+                                    <p><strong>Customer: </strong> @Html.DisplayFor(model => model.Customer.FullName)</p>
+                                    @foreach (var item in Model.ItemDetails)
+                                    {
+                        <p><strong>Product/Service: </strong>@Html.DisplayFor(model => model.Product.Name)</p>}
+                                    <p><strong>Amount: </strong> <span class="amount">@Html.DisplayFor(model => model.Total)</span> </p>
+                                    <p><strong>Date: </strong>@Html.DisplayFor(model => model.Date)</p>
+                                    <p>
+                                        <strong>Status: </strong>
+                                        <span class="label label-success"> @Html.DisplayFor(model => model.Status)</span>
+                                    </p>
+                                    <p><strong>Invoice: </strong> <a>@Html.DisplayFor(model => model.Product.Invoice.InvoiceDetailsID)</a> </p>
+                                    <p>
+                                        <a href="@Url.Action("Edit", "Order", new { id = Model.Order_ID })" class="btn btn-primary btn-icon waves-effect waves-themed has-tooltip">
+                                            <i class="fas fa-pencil-alt">
+
+                                            </i>
+                                            Edit
+                                        </a> |
+                                        <a href="@Url.Action("GetAllOrder", "Order")" class="btn btn-danger waves-effect waves-themed has-tooltip">
+                                            <i class="fas fa-backward"></i>
+                                            Back to List
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

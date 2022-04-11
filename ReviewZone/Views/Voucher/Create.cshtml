@@ -1,0 +1,161 @@
+﻿@model ReviewZone.Models.VoucherModel
+
+@{ ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<link href="~/Content/CSS/Vouchercreate.css" rel="stylesheet" /><main id="clx-page-content" role="main" class="page-content ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-hdr">
+                    <h2><span></span>Add New Voucher</h2>
+                </div>
+                <div class="panel-container" id="ibox_form">
+                    <div class="panel-container show" id="ibox_form">
+                        <div class="panel-content">
+                            <div class="px-2">
+                                <div class="alert alert-danger" id="emsg" style="display: none;">
+                                    <span id="emsgbody"></span>
+                                </div>
+                                @using (Html.BeginForm())
+                                {
+                    @Html.AntiForgeryToken()
+
+                                    <div class="form-horizontal">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <form id="rform">
+                                            <div class="row align-items-center justify-content-center">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.NextDueDate, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.NextDueDate, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                                                @Html.ValidationMessageFor(model => model.NextDueDate, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.RepeatEvery, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.DropDownListFor(model => model.RepeatEvery, new SelectList(ViewBag.repeatList), new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.RepeatEvery, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.DropDownListFor(model => model.Currency, new SelectList(ViewBag.currList), new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.FromAccount, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.DropDownListFor(model => model.FromAccount, ViewBag.accountList as SelectList, "--Select Account--", new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.FromAccount, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <span class="help-block"><a href="@Url.Action("Create", "Account")" id="account_add">| Or Add New Account</a> </span>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Payee, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.DropDownListFor(model => model.Payee, ViewBag.customerList as SelectList, "--Select Customer--", new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.Payee, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <span class="help-block"><a href="@Url.Action("Create", "Customer")" id="contact_add">| Or Add New Customer</a> </span>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label h6 col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.DropDownListFor(model => model.Category, new SelectList(ViewBag.cateList), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 row">
+                                                        <div class="form-group">
+
+                                                            @Html.LabelFor(model => model.Emp_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                            <div class="col-md-10">
+                                                                @Html.DropDownListFor(model => model.Emp_ID, ViewBag.employeeList as SelectList, "--Select Owner--", new { @class = "form-control" })
+                                                                @Html.ValidationMessageFor(model => model.Emp_ID, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+
+                                                        <span class="help-block"><a href="@Url.Action("Create", "Employee")" id="contact_add">| Or Add New Employee</a> </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row align-items-center justify-content-center">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3 mt-3">
+                                                        <button class="btn btn-primary mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
+                                                            <i class="fas fa-save">
+                                                            </i>
+                                                            Submit
+                                                        </button> |
+                                                        <a href="@Url.Action("GetAllVoucher", "Voucher")">Or Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+<script>
+    const myDatePicker = MCDatepicker.create({
+        el: '#NextDueDate',
+    })
+</script>
+<script type="text/javascript">
+    function ShowSuccessMsg() {
+        swal("Voucher Created!", "Voucher Successfully Created!", "success");
+
+    }
+
+    function ShowFailure() {
+        swal("Invalid Inputs!", "Voucher Cannot Be Created!", "error");
+    }
+
+
+
+</script>
+@if (ViewBag.JavaScriptFunction != null)
+{
+    <script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    </script>
+}

@@ -1,0 +1,418 @@
+﻿@model ReviewZone.Models.InvoiceModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/CSS/Invoicecreate.css" rel="stylesheet" />
+<main id="clx-page-content" role="main" class="page-content ">
+    <form id="invform" method="post">
+        <div class="row" id="ibox_form">
+            <div class="alert alert-danger" id="emsg" style="display: none;">
+                <span id="emsgbody"></span>
+            </div>
+            <div class="col-md-12">
+                <div class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            NFC: B000001
+                        </h2>
+                        <div class="panel-toolbar">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary mt-3 mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
+                                    <i class="fas fa-save">
+                                    </i>
+                                    Save
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-container">
+                        <div class="panel-content">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+
+                                                        @Html.LabelFor(model => model.Customer_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+
+                                                            @Html.DropDownListFor(model => model.Customer_ID, ViewBag.customerList as SelectList, "--Select Customer--", new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Customer_ID, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <span class="help-block"><a href="@Url.Action("Create", "Customer")" id="contact_add">| Or Add New Customer</a> </span>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+
+                                                        @Html.LabelFor(model => model.Emp_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.DropDownListFor(model => model.Emp_ID, ViewBag.employeeList as SelectList, "--Select Owner--", new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.Emp_ID, "", new { @class = "text-danger" })
+
+                                                        </div>
+                                                    </div>
+                                                    <span class="help-block"><a href="@Url.Action("Create", "Employee")" id="employee_add">| Or Add New Employee</a> </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.TextAreaFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                                            @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.CreatedOn, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.EditorFor(model => model.CreatedOn, new { htmlAttributes = new { @Value = @DateTime.Now, @class = "form-control", @readonly = "readonly" } })
+                                                            @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.PaymentTerm, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        <div class="col-md-10">
+                                                            @Html.DropDownListFor(model => model.PaymentTerm, new SelectList(ViewBag.paymentTermList), new { @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.PaymentTerm, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-bordered invoice-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="30%">Item Name</th>
+                                                <th width="10%">Quantity</th>
+                                                <th width="15%">Price</th>
+                                                <th>Discount</th>
+                                                <th width="20%">Tax</th>
+                                                <th width="15%">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @Html.DropDownListFor(model => model.ItemNumber, ViewBag.productList as SelectList, "--Select Product--", new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.ItemNumber, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownListFor(model => model.Tax, new SelectList(ViewBag.taxList), new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                                </td>
+                                                <td>
+                                                    @Html.EditorFor(model => model.Tot, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.Tot, "", new { @class = "text-danger" })
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" value="Create" class="btn btn-primary waves-effect waves-themed" id="btnAdd"><i class="fas fa-plus"></i> Add Product</button>
+                                <br>
+                                <br>
+                                <hr>
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-bordered table-striped table-hover invoice-table" id="invoice_items">
+                                        <thead>
+                                            <tr>
+                                                <th width="30%">Item Name</th>
+                                                <th width="10%">Quantity</th>
+                                                <th width="15%">Price</th>
+                                                <th>Discount</th>
+                                                <th width="20%">Tax</th>
+                                                <th width="15%">Total</th>
+                                                <th width="15%">Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 offset-md-8">
+                                        <table class="table invoice-total">
+                                            <tbody>
+                                                <tr>
+                                                    <td><strong>Sub Total :</strong></td>
+                                                    <td class="amount">
+                                                        @Html.EditorFor(model => model.Sub_Total, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <strong>Discount <span id="is_pt"></span> : </strong>
+                                                    </td>
+                                                    <td class="amount">
+                                                        @Html.EditorFor(model => model.DiscountAmount, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>TAX :</strong></td>
+                                                    <td id="taxtotal" class="amount">
+                                                        @Html.EditorFor(model => model.TaxAmount, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>TOTAL :</strong></td>
+                                                    <td class="amount">
+                                                        @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr />
+                                <br>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</main>
+
+<script>
+    $(document).ready(function () {
+
+        $("#Quantity,#Price").change(function () {
+            var q = parseInt($("#Quantity").val());
+            var p = parseInt($("#Price").val());
+
+            var t = (q * p);
+            $("#Tot").val(t);
+
+        });
+
+        $("#Discount").change(function () {
+            var d = parseInt($("#Discount").val());
+            var tt = parseInt($("#Tot").val());
+            var tot = (tt - ((d / 100) * tt));
+            $("#Tot").val(tot);
+        });
+        var TotalAmount = 0.00;
+        var Sub_Total = 0.00;
+        var Discount = 0.00;
+        var Tax = 0.00;
+        $("#btnAdd").click(function (e) {
+            e.preventDefault();
+            $("#invoice_items").append("<tr><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Quantity').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Discount').val() + "</td><td>" + $('#Tax').val() + "</td><td>" + $('#Tot').val() + `</td><td><button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+
+            $('#invoice_items tr').each(function (index, tr) {
+                $(tr).each(function () {
+                    var value = parseFloat($('td', this).eq(1).text());
+
+                    //alert(value)
+                    //console.log(value)
+                    var $Quantity = parseFloat($(tr).find('td:eq(1)').text());
+                    //alert($Quantity)
+                    //console.log($Quantity)
+                    var $Price = parseFloat($(tr).find('td:eq(2)').text());
+                    var $Discount = parseFloat($(tr).find('td:eq(3)').text());
+                    var $TotalAmount = parseFloat($(tr).find('td:eq(5)').text());
+
+                    var $subtotal = 0;
+                    var $discount = 0;
+
+                    $subtotal = $Quantity * $Price;
+
+                    $discount = $subtotal - (($Discount / 100) * $subtotal);
+
+                    Discount += $discount;
+
+                    Sub_Total += $subtotal;
+                    TotalAmount += value;
+
+
+                });
+            });
+            $("#Sub_Total").val(Sub_Total.toFixed(2))
+            $("#DiscountAmount").val(Discount.toFixed(2))
+            $("#Total").val(TotalAmount.toFixed(2))
+            $("#TaxAmount").val(Tax.toFixed(2))
+
+        });
+
+        $("#invoice_items").on('click', '#btnRemove', function () {
+            $(this).closest('tr').remove();
+        });
+        $("#submit").click(function (e) {
+            e.preventDefault();
+            SaveRecords();
+        });
+
+
+    });
+
+    function SaveRecords() {
+
+        var listOfInvoiceDetailsModel = [];
+        $('#invoice_items tr').each(function (index, tr) {
+            var obj = {}
+
+            $(tr).each(function () {
+                obj['ItemNumber'] = $(tr).find('td:eq(0)').text();
+                obj['Quantity'] = $(tr).find('td:eq(1)').text();
+                obj['Price'] = $(tr).find('td:eq(2)').text();
+                obj['Discount'] = $(tr).find('td:eq(3)').text();
+                obj['Tax'] = $(tr).find('td:eq(4)').text();
+                obj['Total'] = $(tr).find('td:eq(5)').text();
+
+            });
+            listOfInvoiceDetailsModel.push(obj);
+        });
+
+        var Customer_ID = $("#Customer_ID").val();
+        var Emp_ID = $("#Emp_ID").val();
+        var Status = $("#Status").val();
+        var Title = $("#Title").val();
+        var Address = $("#Address").val();
+        var OrderDate = $("#OrderDate").val();
+        var CreatedOn = $("#CreatedOn").val();
+        var PaymentTerm = $("#PaymentTerm").val();
+
+
+        listOfInvoiceDetailsModel.shift();
+
+        var model = {
+            "ItemDetails": listOfInvoiceDetailsModel,
+            "Customer_ID": Customer_ID,
+            "Emp_ID": Emp_ID,
+            "Status": Status,
+            "Title": Title,
+            "Address": Address,
+            "OrderDate": OrderDate,
+            "CreatedOn": CreatedOn,
+            "PaymentTerm": PaymentTerm
+        }
+
+
+        $.ajax({
+            type: "Post",
+            url: "/Invoice/Create",
+            data: JSON.stringify(model),
+            /*            datatype: "json",*/
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.success) {
+                    swal("Invoice Created!",data.responseText, {
+                        icon: "success",
+                    }).then(function () {
+                        window.location.href = "/Invoice/GetAllInvoice"
+                    });
+                } else {
+                    swal("Invalid inputs!", data.responseText, "error");
+                }
+
+            },
+            error: function (xhr) {
+                alert('No Valid Data');
+            }
+        });
+    }
+
+    const myDatePicker = MCDatepicker.create({
+        el: '#OrderDate',
+    })
+</script>
+
+
+
+
+<script type="text/javascript">
+    function ShowSuccessMsg() {
+        swal("Invoice Created!", "Invoice Successfully Created!", "success");
+
+    }
+
+    function ShowFailure() {
+        swal("Invalid Inputs!", "Invoice Cannot Be Created!", "error");
+    }
+
+
+
+</script>
+@if (ViewBag.JavaScriptFunction != null)
+{
+    <script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction)
+    </script>
+}
+

@@ -1,0 +1,223 @@
+﻿@model ReviewZone.Models.ProductModel
+
+@{ ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+
+<link href="~/Content/CSS/Productcreate.css" rel="stylesheet" />
+<main id="clx-page-content" role="main" class="page-content ">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ItemNumber)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Add Product
+                        </h2>
+                    </div>
+
+                    <div class="panel-container" id="ibox_form">
+                        <div class="panel-content">
+
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label h6  col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label h6  col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label h6  col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.TotalInStock, htmlAttributes: new { @class = "control-label h6  col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.TotalInStock, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.TotalInStock, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="mb-3">
+                                <div class="row">
+                                    @Html.LabelFor(model => model.Width, htmlAttributes: new { @class = "control-label h6  col-md-2", id = "dimen" })
+                                    <div class="col-md-4 ">
+                                        @Html.EditorFor(model => model.Width, new { htmlAttributes = new { @class = "form-control", id = "dimen" } })
+                                        @Html.ValidationMessageFor(model => model.Width, "", new { @class = "text-danger" })
+                                    </div>
+                                    @Html.LabelFor(model => model.Length, htmlAttributes: new { @class = "control-label h6  col-md-2", id = "dimen" })
+                                    <div class="col-md-4 ">
+                                        @Html.EditorFor(model => model.Length, new { htmlAttributes = new { @class = "form-control", id = "dimen" } })
+                                        @Html.ValidationMessageFor(model => model.Length, "", new { @class = "text-danger" })
+                                    </div>
+                                    @Html.LabelFor(model => model.Height, htmlAttributes: new { @class = "control-label h6  col-md-2", id = "dimen" })
+                                    <div class="col-md-4 ">
+                                        @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control", id = "dimen" } })
+                                        @Html.ValidationMessageFor(model => model.Height, "", new { @class = "text-danger" })
+                                    </div>
+                                    @Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label h6  col-md-2", id = "dimen" })
+                                    <div class="col-md-4 ">
+                                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control", id = "dimen" } })
+                                        @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3 ">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Color, htmlAttributes: new { @class = "control-label h6  col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Color, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label h6  col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 mt-3">
+                                <button class="btn btn-primary waves-effect waves-themed" type="submit" value="Save" id="submit ">
+                                    <i class="fas fa-save">
+                                    </i>
+                                    Submit
+                                </button>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    if (User.IsInRole("admin"))
+                                    {
+                                        <a onclick="DeleteBtn()" class="btn btn-danger mr-3 ml-3 waves-effect waves-themed has-tooltip">
+                                            <i class="fas fa-trash-alt">
+                                            </i>
+                                            Delete
+                                        </a>
+                                    }
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel">
+                    <div class="panel-container">
+                        <div class="panel-content">
+                            <div class="panel-body" id="ibox_form">
+                                <h3>Image</h3>
+                                <div class="hr-line-dashed"></div>
+                                <div class="mb-3">
+                                    <div class="form-group">
+                                        <div class="col-md-10">
+                                            <img src="@Url.Content(Session["imgPath"].ToString())" height="300" width="500" onerror="this.onerror = null; this.src = '/Images/default_Product.png';" />
+                                            <input id="File" type="file" name="File" class="form-control" />
+                                            @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>}
+</main>
+
+<script>
+    function ShowSuccessMsg() {
+        swal("Product Updated!", "Product Has Been Succesfully Updated!", "success")
+            .then(function () {
+                window.location = "/Product/GetAllProduct";
+            });
+    }
+
+    function ShowFailure() {
+        swal("Invalid Inputs!", "Product Cannot Be Updated!", "error");
+    }
+
+    function DeleteBtn() {
+
+        var ItemNumber = $("#ItemNumber").val();
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this product!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Product/Delete?id=' + ItemNumber,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                swal(response.responseText, {
+                                    icon: "success",
+                                }).then(function () {
+                                    window.location.href = "/Product/GetAllProduct"
+                                });
+                            } else {
+                                swal("Cannot Be Deleted!", response.responseText, "error");
+                            }
+
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                } else {
+                    swal("Your product is safe!");
+                }
+            });
+    }
+</script>
+@if (ViewBag.JavaScriptFunction != null)
+{
+<script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction)
+</script>}

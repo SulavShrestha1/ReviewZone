@@ -1,0 +1,64 @@
+<main id="clx-page-content" role="main" class="page-content ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-hdr">
+                    <h2><span></span>Edit Task</h2>
+                </div>
+                <div class="panel-container show" id="ibox_form">
+                    <div class="panel-content">
+                        <div class="px-2">
+                            <div class="alert alert-danger" id="emsg" style="display: none;">
+                                <span id="emsgbody"></span>
+                            </div>
+                            <form id="rform">
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="mb-3 row">
+                                            <label for="task" class="col-sm-3"><span class="h6">Task</span></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="task" name="task" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="due_date" class="col-sm-3"><span class="h6">Due Date</span></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="due_date" name="due_date" class="form-control" autofocus="">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="owner_id" class="col-sm-3"><span class="h6">Assigned To</span> </label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="owner_id" id="owner_id">
+                                                    <option value="1" selected="">Richard Williams</option>
+                                                    <option value="57">Jose luis</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label for="status" class="col-sm-3"><span class="h6">Status</span></label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" name="owner_id" id="owner_id">
+                                                    <option value="1" selected="">Pending</option>
+                                                    <option value="2">Completed</option>
+                                                    <option value="3">Cancelled</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <button class="btn btn-primary waves-effect waves-themed" type="submit" id="submit"> Update</button> | <a href="/">Or Cancel</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

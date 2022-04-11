@@ -1,0 +1,106 @@
+﻿@model ReviewZone.Models.TaskModel
+
+@{ ViewBag.Title = "Details";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<link href="~/Content/CSS/Details.css" rel="stylesheet" />
+<h2 class="text-center">@Html.DisplayFor(model => model.Employee.FullName)'s Details</h2>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-container">
+                <div class="panel-content">
+                    <div class="container">
+                        <h4 class="text-center">Account Details</h4>
+                        <hr />
+                        <ul class="dl-horizontal list-group-item-dark">
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Task_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Task_ID)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Emp_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Employee.FullName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.TaskName)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.TaskName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.DueDate)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.DueDate)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.AssignedTo)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.AssignedTo)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Status)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Status)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Description)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Description)
+                            </li>
+
+                        </ul>
+                        <p>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+
+                                if (User.IsInRole("admin") || User.IsInRole("evaluator"))
+                                {
+                                    <a href="@Url.Action("Edit", "Task", new { id = Model.Task_ID })" class="btn btn-primary btn-icon waves-effect waves-themed has-tooltip">
+                                        <i class="fas fa-pencil-alt">
+
+                                        </i>
+                                        Edit
+                                    </a>
+                                }
+                            }|
+                        <a href="@Url.Action("GetAllTask", "Task")" class="btn btn-danger waves-effect waves-themed has-tooltip">
+                            <i class="fas fa-backward"></i>
+                            Back to List
+                        </a>
+                                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

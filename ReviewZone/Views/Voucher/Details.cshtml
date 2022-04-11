@@ -1,0 +1,117 @@
+﻿@model ReviewZone.Models.VoucherModel
+
+@{ ViewBag.Title = "Details";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<link href="~/Content/CSS/Details.css" rel="stylesheet" />
+<h2 class="text-center">@Html.DisplayFor(model => model.Employee.FullName)'s Details</h2>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-container">
+                <div class="panel-content">
+                    <div class="container">
+                        <h4 class="text-center">Account Details</h4>
+                        <hr />
+                        <ul class="dl-horizontal list-group-item-dark">
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Voucher_No)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Voucher_No)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Title)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Title)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.NextDueDate)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.NextDueDate)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.RepeatEvery)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.RepeatEvery)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Currency)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Currency)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Amount)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Amount)
+                            </li>
+                            
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.FromAccount)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.FromAccount)
+                            </li> 
+                            
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Payee)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Customer.FullName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Category)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Category)
+                            </li>
+
+                        </ul>
+                        <p>
+                            <a href="@Url.Action("Edit", "Voucher", new { id = Model.Voucher_No })" class="btn btn-primary btn-icon waves-effect waves-themed has-tooltip">
+                                <i class="fas fa-pencil-alt">
+
+                                </i>
+                                Edit
+                            </a> |
+                            <a href="@Url.Action("GetAllVoucher", "Voucher")" class="btn btn-danger waves-effect waves-themed has-tooltip">
+                                <i class="fas fa-backward"></i>
+                                Back to List
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

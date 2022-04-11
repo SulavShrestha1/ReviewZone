@@ -1,0 +1,182 @@
+﻿@model ReviewZone.Models.InvoiceModel
+
+@{ ViewBag.Title = "Details";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
+<link href="~/Content/CSS/InvoiceDetails.css" rel="stylesheet" />
+<main id="clx-page-content" role="main" class="page-content ">
+    <div class="row">
+        <div class="col-lg-12" id="application_ajaxrender">
+            <div class="panel">
+                <div class="panel-hdr">
+                    <h2 class="d-md-inline">
+                        Invoice -
+                        @Html.DisplayFor(model => model.InvoiceNumber)
+                    </h2>
+                </div>
+                <div class="panel-container">
+                    <div class="panel-content">
+                        <div class="invoice">
+                            <header class="clearfix">
+                                <div class="row">
+                                    <div class="col-sm-6 mt-md">
+                                        <h2 class="h2 mt-none mb-sm text-dark text-bold">INVOICE</h2>
+                                        <h4 class="h4 m-none text-dark text-bold">
+                                            #
+                                            @Html.DisplayFor(model => model.InvoiceNumber)
+                                        </h4>
+                                        @if (Model.Status == "Unpaid")
+                                        {
+                                    <h3 class="alert alert-danger">
+                                        @Html.DisplayFor(model => model.Status)
+                                    </h3>}
+                                        @if (Model.Status == "Draft")
+                                        {
+                                    <h3 class="alert alert-info">
+                                        @Html.DisplayFor(model => model.Status)
+                                    </h3> }
+                                        @if (Model.Status == "Pending")
+                                        {
+                                    <h3 class="alert alert-primary">
+                                        @Html.DisplayFor(model => model.Status)
+                                    </h3> }
+                                        else
+                                        {
+                                    <h3 class="alert alert-success">
+                                        @Html.DisplayFor(model => model.Status)
+                                    </h3>}
+
+                                    </div>
+                                    <div class="col-sm-6 text-end mt-md mb-md">
+                                        <div class="ib">
+                                            <img src="../../../../Scripts/Client/assets/Images/logo3.png" height="200px" width="200px" alt="Logo" style="margin-bottom: 15px;">
+                                        </div>
+                                        <address class="ib mr-xlg">
+                                            <strong>ReviewZone</strong>
+                                            <br>
+                                            ReviewZone <br>1101 Marina Villae Parkway, Suite 201<br>Alameda, California 94501<br>United States
+                                        </address>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="bill-info">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="bill-to">
+                                            <p class="h5 mb-xs text-dark text-semibold"><strong>Invoiced To:</strong></p>
+                                            <address>
+
+                                                @Html.DisplayFor(model => model.Customer.Company)
+                                                <br>
+                                                ATTN:
+                                                @Html.DisplayFor(model => model.Customer.FullName)
+                                                <br>
+
+                                                @Html.DisplayFor(model => model.Customer.City) <br>
+                                                @Html.DisplayFor(model => model.Customer.State) <br>
+                                                @Html.DisplayFor(model => model.Customer.Zip) <br>
+                                                @Html.DisplayFor(model => model.Customer.Country)
+                                                <br>
+                                                <strong>Phone:</strong>
+                                                @Html.DisplayFor(model => model.Customer.PhoneNumber)
+                                                <br>
+                                                <strong>Email:</strong>
+                                                @Html.DisplayFor(model => model.Customer.Email)
+                                            </address>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="bill-data text-end">
+                                            <p class="mb-none">
+                                                <span class="text-dark">Invoice Date:</span>
+                                                <span class="value">
+                                                    @Html.DisplayFor(model => model.CreatedOn)
+                                                </span>
+                                            </p>
+                                            <p class="mb-none">
+                                                <span class="text-dark">Due Date:</span>
+                                                <span class="value">
+                                                    @Html.DisplayFor(model => model.CreatedOn)
+                                                </span>
+                                            </p>
+                                            <h2>
+                                                Invoice Total:
+                                                $ @Html.DisplayFor(model => model.Total)
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered invoice-items">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th id="cell-item" class="text-semibold">Item</th>
+                                            <th id="cell-price" class="text-center text-semibold">Price</th>
+                                            <th id="cell-qty" class="text-center text-semibold">Qty</th>
+                                            <th id="cell-qty" class="text-center text-semibold">Discount</th>
+                                            <th id="cell-total" class="text-center text-semibold">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.ItemDetails)
+                                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(model => item.Product.Name)
+                                </td>
+                                <td class="text-center">
+                                    $ @Html.DisplayFor(model => item.Price)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(model => item.Quantity)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(model => item.Discount) %
+                                </td>
+                                <td class="text-center">
+                                    $ @Html.DisplayFor(model => item.Total)
+                                </td>
+
+                            </tr>}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="invoice-summary">
+                                <div class="row">
+                                    <div class="col-md-4 offset-md-8">
+                                        <table class="table h5 text-dark">
+                                            <tbody>
+                                                <tr class="b-top-none">
+                                                    <td colspan="2">Subtotal</td>
+                                                    <td class="text-left">
+                                                        $ @Html.DisplayFor(model => model.Sub_Total)
+                                                    </td>
+                                                </tr>
+                                                <tr class="b-top-none">
+                                                    <td colspan="2">Discount</td>
+                                                    <td class="text-left">
+                                                        $ @Html.DisplayFor(model => model.DiscountAmount)
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">TAX</td>
+                                                    <td class="text-left">$ 0.00</td>
+                                                </tr>
+                                                <tr class="h4">
+                                                    <td colspan="2">Grand Total</td>
+                                                    <td class="text-left">
+                                                        $ @Html.DisplayFor(model => model.Total)
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,46 @@
+<div class="page-wrapper">
+    <div class="page-inner">
+        <div class="page-content-wrapper bg-transparent m-0">
+            <div class="height-10 w-100 shadow-sm px-4 bg-brand-gradient">
+                <div class="d-flex align-items-center container p-0">
+                    <div class="page-logo width-mobile-auto m-0 align-items-center justify-content-center p-0 bg-transparent bg-img-none shadow-0 height-9 border-0">
+                        <a [routerLink]="['/']" class="page-logo-link press-scale-down d-flex align-items-center">
+                            <img src="assets/Images/logo3.png" alt="Review Zone" aria-roledescription="logo">
+                            <span class="page-logo-text mr-1">Review Zone</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1">
+                <div class="container py-4 py-lg-5 my-lg-5 px-4 px-sm-0">
+                    <div class="mx-auto" style="max-width: 440px;">
+                        <div class="card p-4">
+                            <h1 class="mb-3 text-center">
+                                Login
+                            </h1>
+                            <form method="post" id="form_admin_auth" class="mt-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="username">Email Address</label>
+                                    <input id="username" name="username" class="form-control form-control-lg" required="">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">Password</label>
+                                    <input type="password" id="password" name="password" class="form-control form-control-lg" required="">
+                                </div>
+                                <div class="mb-3">
+                                    <button [routerLink]="['/']" type="submit" id="btn_admin_auth" class="btn btn-primary btn-block btn-lg waves-effect waves-themed">Sign in</button>
+                                </div>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a id="to-recover" class="text-info">Forgot password ?</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="position-absolute pos-bottom pos-left pos-right p-3 text-center">
+                        © 2021 Review Zone
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

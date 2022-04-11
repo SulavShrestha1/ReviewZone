@@ -1,0 +1,392 @@
+﻿@model ReviewZone.Models.OrderModel
+
+@{ ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+<link href="~Content/CSS/Ordercreate.css" rel="stylesheet" />
+<main id="clx-page-content" role="main" class="page-content ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel" data-select2-id="6">
+                <div class="panel-hdr">
+                    <h2>Add New Order</h2>
+                </div>
+                <div class="panel-container" id="ibox_form" data-select2-id="ibox_form">
+                    <div class="panel-content" data-select2-id="5">
+
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            @Html.HiddenFor(model => model.Order_ID)
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <form class="form-horizontal" id="ib_form" data-select2-id="ib_form">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6 offset-md-3">
+                                        <div class="mb-3">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Customer_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                <div class="col-md-10">
+
+                                                    @Html.DropDownListFor(model => model.Customer_ID, ViewBag.customerList as SelectList, "--Select Customer--", new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Customer_ID, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <span class="help-block"><a href="@Url.Action("Create", "Customer")" id="contact_add">| Or Add New Customer</a> </span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Emp_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                <div class="col-md-10">
+
+                                                    @Html.DropDownListFor(model => model.Emp_ID, ViewBag.employeeList as SelectList, "--Select Owner--", new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Emp_ID, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <span class="help-block"><a href="@Url.Action("Create", "Employee")" id="contact_add">| Or Add New Employee</a> </span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                <div class="col-md-10">
+
+                                                    @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control netProd", autocomplete = "off" } })
+                                                    @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div id="item_block">
+                                            <div class="mb-3">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ItemNumber, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                    <div class="col-md-10">
+
+                                                        @Html.DropDownListFor(model => model.ItemNumber, ViewBag.productList as SelectList, "--Select Product--", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.ItemNumber, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <span class="help-block"><a href="@Url.Action("Create", "Product")" id="contact_add">| Or Add New Product</a> </span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="col-md-4 control-label h6 " for="qty">&nbsp;</label>
+                                            <div>
+                                                <button type="button" id="btnAdd" class="btn btn-primary waves-effect waves-themed"> Add another item</button>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="mb-3">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                <div class="col-md-10">
+                                                    @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.statusList), "--Select Status--", new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.BillingCycle, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                <div class="col-md-10">
+                                                    @Html.DropDownListFor(model => model.BillingCycle, new SelectList(ViewBag.billingList), "--Select Group--", new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(model => model.BillingCycle, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Total, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                <div class="col-md-10">
+
+                                                    @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control netProd" } })
+                                                    @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <hr>
+                                        <div class="table-responsive mt-3">
+                                            <table class="table table-bordered table-striped table-hover order-table" id="order_items">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th width="30%">Item Name</th>
+                                                        <th width="30%">UnitPrice</th>
+                                                        <th width="25%">Quantity</th>
+                                                        <th width="15%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.ItemDetails)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.HiddenFor(modelItem => item.OrderDetailsID)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.ItemNumber, new { @class = "form-control" })
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => item.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                                            </td>
+                                                            <td>
+                                                                <button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button>
+                                                            </td>
+                                                        </tr>
+}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center justify-content-center">
+                                    <div class="col-md-6">
+                                        <hr>
+                                        <div class="mb-3 mt-3">
+                                            <div>
+                                                <button class="btn btn-primary mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
+                                                    <i class="fas fa-save">
+                                                    </i>
+                                                    Submit
+                                                </button>
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    if (User.IsInRole("admin"))
+                                                    {
+                                                        <a onclick="DeleteBtn()" class="btn btn-danger mr-3 ml-3 waves-effect waves-themed has-tooltip">
+                                                            <i class="fas fa-trash-alt">
+                                                            </i>
+                                                            Delete
+                                                        </a>
+                                                    }
+
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    $(document).ready(function (e) {
+
+        //$("#Quantity,#Price").change(function () {
+        //    var q = parseInt($("#Quantity").val());
+        //    var p = parseInt($("#Price").val());
+
+        //    var t = (q * p);
+        //    $("#Total").val(t);
+
+        //});
+
+
+        $("#btnAdd").click(function (e) {
+            e.preventDefault();
+            $("#order_items").append("<tr><td></td><td>" + $('#ItemNumber').val() + "</td><td>" + $('#UnitPrice').val() + "</td><td>" + $('#Quantity').val() + "</td>" + `<td><button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+            //$('#order_items tr').each(function (index, tr) {
+            //    $(tr).each(function () {
+            //        var $tr = $(this);
+            //        var $Quantity = $tr.find('td:eq(1)').text().trim() != "" ? parseInt($tr.find('td:eq(1)').text().trim()) : 0;
+            //        var $Price = $tr.find('td:eq(2)').text().trim() != "" ? parseInt($tr.find('td:eq(2)').text().trim()) : 0;
+            //        var $Discount = $tr.find('td:eq(3)').text().trim() != "" ? parseInt($tr.find('td:eq(3)').text().trim()) : 0;
+            //        var $TotalAmount = $tr.find('td:eq(5)').text().trim() != "" ? parseInt($tr.find('td:eq(5)').text().trim()) : 0;
+
+            //        var $subtotal = 0;
+            //        var $discount = 0;
+            //        $subtotal = $Quantity * $Price;
+
+            //        $discount = $subtotal - (($Discount / 100) * $subtotal);
+
+            //        Discount += $discount;
+
+            //        Sub_Total += $subtotal;
+
+            //        TotalAmount += $TotalAmount;
+
+            //    });
+            //});
+        });
+
+        $("#order_items").on('click', '#btnRemove', function () {
+            var OrderDetailsID = $(this).closest("tr").find("td:eq(0) input").val();
+            let confirmAction = confirm("Are you sure to Delete");
+            if (confirmAction) {
+                $(this).closest('tr').remove();
+                $.ajax({
+                    type: "Post",
+                    url: '/Order/DeleteOrderDetails?id=' + OrderDetailsID,
+                    /*            datatype: "json",*/
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+
+                        alert('Success');
+
+                    },
+                    error: function (xhr) {
+                        alert('No Valid Data');
+                    }
+                });
+            } else {
+                return;
+            }
+        });
+
+        $("#submit").click(function (e) {
+            e.preventDefault();
+            SaveRecords();
+        });
+
+        //$(document).on('click', '#btnRemove', function (e) {
+        //    e.preventDefault();
+
+        //    let row = $(this).parent().parent().parent();
+        //    $(row).remove();
+        //});
+    });
+
+    function SaveRecords() {
+
+        var listOfOrderDetailsModel = [];
+        $('#order_items tr').each(function (index, tr) {
+            var obj = {}
+
+            $(tr).each(function () {
+                obj['OrderDetailsID'] = $(tr).find('td:eq(0)').text();
+                obj['ItemNumber'] = $(tr).find('td:eq(1)').text();
+                obj['UnitPrice'] = $(tr).find('td:eq(2)').text();
+                obj['Quantity'] = $(tr).find('td:eq(3)').text();
+            });
+            listOfOrderDetailsModel.push(obj);
+
+        });
+
+        console.log(listOfOrderDetailsModel);
+
+        listOfOrderDetailsModel.shift();
+
+        var Order_ID = $("#Order_ID").val();
+        var Customer_ID = $("#Customer_ID").val();
+        var Emp_ID = $("#Emp_ID").val();
+        var Status = $("#Status").val();
+        var BillingCycle = $("#BillingCycle").val();
+        var Total = $("#Total").val();
+        var model = {
+            "ItemDetails": listOfOrderDetailsModel,
+            "Order_ID": Order_ID,
+            "Customer_ID": Customer_ID,
+            "Emp_ID": Emp_ID,
+            "Status": Status,
+            "BillingCycle": BillingCycle,
+            "Total": Total,
+        }
+
+        console.log(model);
+        $.ajax({
+            type: "Post",
+            url: "/Order/Create",
+            data: JSON.stringify(model),
+            cache: false,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data)  {
+
+                alert('Success');
+                window.location = '@Url.Action("Create", "Order")';
+            },
+            error: function (xhr) {
+                alert('No Valid Data');
+            }
+        });
+    }
+
+    const myDatePicker = MCDatepicker.create({
+        el: '#Date',
+    })
+
+    function ShowSuccessMsg() {
+        swal("Order Updated!", "Order Has Been Succesfully Updated!", "success")
+            .then(function () {
+                window.location = "/Order/GetAllOrderr";
+            });
+    }
+    function ShowFailure() {
+        swal("Invalid Inputs!", "Order Cannot Be Updated!", "error");
+    }
+
+    function DeleteBtn() {
+
+        var Order_ID = $("#Order_ID").val();
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this order!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Order/Delete?id=' + Order_ID,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                swal(response.responseText, {
+                                    icon: "success",
+                                }).then(function () {
+                                    window.location.href = "/Order/GetAllOrder"
+                                });
+                            } else {
+                                swal("Cannot Be Deleted!", response.responseText, "error");
+                            }
+
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                } else {
+                    swal("Your order is safe!");
+                }
+            });
+    }
+</script>
+@if (ViewBag.JavaScriptFunction != null)
+{
+<script type="text/javascript">
+        @Html.Raw(ViewBag.JavaScriptFunction)
+</script>}
+
+

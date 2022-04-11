@@ -1,0 +1,145 @@
+﻿@model ReviewZone.Models.EvaluationModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<link href="~/Content/CSS/Details.css" rel="stylesheet" />
+<h2 class="text-center">@Html.DisplayFor(model => model.Employee.FullName)'s Details</h2>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel">
+            <div class="panel-container">
+                <div class="panel-content">
+                    <div class="container">
+                        <h4 class="text-center">Evaluation Details</h4>
+                        <hr />
+                        <ul class="dl-horizontal list-group-item-dark">
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Evaluation_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Evaluation_ID)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Emp_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Employee.FullName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Task_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Task.TaskName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Evaluator_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Evaluator.FullName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Date)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Date)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Efficiency)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Efficiency)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Emp_ID)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Employee.FullName)
+                            </li>
+
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Timeliness)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Timeliness)
+                            </li>
+                            
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Quality)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Quality)
+                            </li>
+                            
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Accuracy)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Accuracy)
+                            </li>
+                            
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Performance)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Performance)
+                            </li>
+                            
+                            <li class="list-group-item list-group-item-dark fw-bolder">
+                                @Html.DisplayNameFor(model => model.Remarks)
+                                : <i class="fas fa-arrow-down"></i>
+                            </li>
+
+                            <li class="list-group-item list-group-item-primary">
+                                @Html.DisplayFor(model => model.Remarks)
+                            </li>
+
+                        </ul>
+                        <p>
+                            <a href="@Url.Action("Edit", "Evaluation", new { id = Model.Evaluation_ID })" class="btn btn-primary btn-icon waves-effect waves-themed has-tooltip">
+                                <i class="fas fa-pencil-alt">
+
+                                </i>
+                                Edit
+                            </a> |
+                            <a href="@Url.Action("GetALlEvaluation", "Evaluation")" class="btn btn-danger waves-effect waves-themed has-tooltip">
+                                <i class="fas fa-backward"></i>
+                                Back to List
+                            </a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div

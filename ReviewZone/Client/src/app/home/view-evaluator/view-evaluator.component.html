@@ -1,0 +1,139 @@
+<main id="clx-page-content" role="main" class="page-content ">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="panel-hdr">
+                        <h2>View Evaluator</h2>
+                    </div>
+                    <div class="panel-container">
+                        <div class="panel-content">
+                            <form method="post" id="mainForm">
+                                <div class="mb-3">
+                                    <label for="inputName">Name</label>
+                                    <input class="form-control" id="inputName" name="name">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input class="form-control" type="email" name="email">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Phone</label>
+                                    <input class="form-control" type="text" name="phone">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Department</label>
+                                    <select class="form-select" name="department_id">
+                                        <option value="">--</option>
+                                        <option value="1">Sales</option>
+                                        <option value="2">Support</option>
+                                        <option value="3">Billing</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Job title</label>
+                                    <input class="form-control" name="job_title">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Address</label>
+                                    <input class="form-control" name="address">
+                                </div>
+                                <div class="mb-3">
+                                    <label>City</label>
+                                    <input class="form-control" name="city">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>State/Region</label>
+                                            <input class="form-control" name="state">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>ZIP/Postal Code</label>
+                                            <input class="form-control" name="zip">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Country</label>
+                                    <select class="form-control" name="country">
+                                        <option value="Afghanistan">Afghanistan</option>
+                                        <option value="Aland Islands">Aland Islands</option>
+                                      
+                                        <option value="Senegal">Senegal</option>
+                                        <option value="Serbia">Serbia</option>
+                                        <option value="Seychelles">Seychelles</option>
+                                        <option value="Sierra Leone">Sierra Leone</option>
+
+                                        <option value="Tanzania">Tanzania</option>
+                                   
+                                        <option value="United Kingdom">United Kingdom</option>
+                                        <option value="United States" selected="selected">United States</option>
+                                        <option value="United States Outlying Islands">United States Outlying Islands</option>
+                                        <option value="Uruguay">Uruguay</option>
+                                      </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Date joined</label>
+                                    <input class="form-control" name="date_hired" datepicker="" data-date-format="yyyy-mm-dd" data-auto-close="true" value="2021-12-07">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Pay frequency</label>
+                                    <select class="form-control" name="pay_frequency">
+    <option value="Monthly">Monthly</option>
+    <option value="Hourly">Hourly</option>
+    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Amount</label>
+                                    <input class="form-control amount" name="amount">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Summary</label>
+                                    <textarea class="form-control" rows="10" name="summary"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="hidden" name="file_link" id="file_link" value="">
+                                    <button class="btn btn-primary waves-effect waves-themed" id="btnSubmit" type="submit">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel">
+                <div class="panel-hdr">
+                    <h2>Delete</h2>
+                    <div class="panel-toolbar">
+                        <a class="btn btn-danger waves-effect waves-themed">Delete</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-container">
+                    <div class="panel-content">
+                        <div class="panel-body" id="ibox_form">
+                            <h3>Image</h3>
+                            <div class="hr-line-dashed"></div>
+                            <ngx-dropzone (change)="onSelect($event)">
+                                <ngx-dropzone-label>
+                                    <h3><i class="fas fa-cloud-upload-alt"></i> Drop File Here</h3>
+                                    <br>
+                                    <span class="note ">Or Click to Upload</span>
+                                </ngx-dropzone-label>
+                                <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                </ngx-dropzone-preview>
+                            </ngx-dropzone>
+                            <div class="hr-line-dashed"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

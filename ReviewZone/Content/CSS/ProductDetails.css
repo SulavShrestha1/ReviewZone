@@ -1,0 +1,80 @@
+﻿body {
+    background-color: #dce3f0
+}
+.section-products {
+    padding: 80px 0 54px;
+}
+
+    .section-products .header-content {
+        margin-bottom: 50px;
+    }
+
+        .section-products .header-content h3 {
+            font-size: 1rem;
+            color: #fe302f;
+            font-weight: 500;
+        }
+
+        .section-products .header-content h2 {
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: #444444;
+        }
+.card {
+    width: 350px;
+    height: 370px
+}
+
+.image {
+    position: absolute;
+    right: 12px;
+    top: 10px
+}
+
+.main-heading {
+    font-size: 40px;
+    color: red !important
+}
+
+.ratings i {
+    color: orange
+}
+
+.user-ratings h6 {
+    margin-top: 2px
+}
+
+.colors {
+    display: flex;
+    margin-top: 2px
+}
+
+    .colors span {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        margin-right: 6px
+    }
+
+        .colors span:nth-child(1) {
+            background-color: red
+        }
+
+        .colors span:nth-child(2) {
+            background-color: blue
+        }
+
+        .colors span:nth-child(3) {
+            background-color: yellow
+        }
+
+        .colors span:nth-child(4) {
+            background-color: purple
+        }
+
+.btn-danger {
+    height: 48px;
+    font-size: 18px
+}

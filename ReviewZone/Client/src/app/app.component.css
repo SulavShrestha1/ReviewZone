@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+mat-drawer {
+    width: 18.2rem;
+    max-width: 18.2rem;
+    background-color: #1e1e2c;
+}
+
+.opened {
+    width: 18.2rem;
+    max-width: 18.2rem;
+}
+
+.closed {
+    width: 4.6875rem;
+}
+
+mat-drawer-container {
+    height: 100%;
+}
+
+.mat-expansion-panel-header-title {
+    color: white !important;
+}
+
+#close {
+    background-color: #fff;
+}
