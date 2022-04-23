@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Voucher
     public class VoucherRepository
     {
+        //Creating a method to add the details of Voucher in the database
         public int AddVoucher(VoucherModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -34,6 +36,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Vouchers from the database
         public List<VoucherModel> GetAllVoucher()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -69,6 +72,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Voucher from the database
         public VoucherModel GetVoucher(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -104,6 +108,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Voucher from the database
         public bool UpdateVoucher(int id, VoucherModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -126,6 +131,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Voucher from the database
         public bool DeleteVoucher(int id)
         {
             using (var context = new ReviewZoneDBEntities())

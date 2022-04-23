@@ -19,12 +19,16 @@
                         </h2>
                         <div class="panel-toolbar">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary mt-3 mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
+                                <button class="btn btn-sm btn-primary mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
                                     <i class="fas fa-save">
                                     </i>
                                     Save
                                 </button>
-
+                                <a href="@Url.Action("GetAllInvoice", "Invoice")" class="btn btn-secondary ml-3 waves-effect waves-themed">
+                                    <i class="fas fa-times">
+                                    </i>
+                                    Cancel
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -68,7 +72,8 @@
                                                     <div class="form-group">
                                                         @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                         <div class="col-md-10">
-                                                            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+
+                                                            @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.statusList), new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
@@ -127,10 +132,10 @@
                                             <div class="col-sm-4">
                                                 <div class="mb-3">
                                                     <div class="form-group">
-                                                        @Html.LabelFor(model => model.PaymentTerm, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        @Html.LabelFor(model => model.DueDate, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                         <div class="col-md-10">
-                                                            @Html.DropDownListFor(model => model.PaymentTerm, new SelectList(ViewBag.paymentTermList), new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.PaymentTerm, "", new { @class = "text-danger" })
+                                                            @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                                            @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
                                                 </div>
@@ -252,65 +257,72 @@
     $(document).ready(function () {
 
         $("#Quantity,#Price").change(function () {
-            var q = parseInt($("#Quantity").val());
-            var p = parseInt($("#Price").val());
-
+            var q = parseFloat($("#Quantity").val());
+            var p = parseFloat($("#Price").val());
             var t = (q * p);
             $("#Tot").val(t);
 
         });
 
         $("#Discount").change(function () {
-            var d = parseInt($("#Discount").val());
-            var tt = parseInt($("#Tot").val());
+            var d = parseFloat($("#Discount").val());
+            var tt = parseFloat($("#Tot").val());
             var tot = (tt - ((d / 100) * tt));
             $("#Tot").val(tot);
         });
-        var TotalAmount = 0.00;
-        var Sub_Total = 0.00;
-        var Discount = 0.00;
-        var Tax = 0.00;
+
         $("#btnAdd").click(function (e) {
             e.preventDefault();
-            $("#invoice_items").append("<tr><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Quantity').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Discount').val() + "</td><td>" + $('#Tax').val() + "</td><td>" + $('#Tot').val() + `</td><td><button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+            $("#invoice_items").append("<tr><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Quantity').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Discount').val() + "</td><td>" + $('#Tax').val() + "</td><td>" + $('#Tot').val() + `</td><td><button type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+            calculations()
 
+        });
+
+        function calculations() {
+            var TotalAmount = 0;
+            var Sub_Total = 0;
+            var Discount = 0;
+            var Tax = 0.00;
             $('#invoice_items tr').each(function (index, tr) {
                 $(tr).each(function () {
-                    var value = parseFloat($('td', this).eq(1).text());
 
-                    //alert(value)
-                    //console.log(value)
-                    var $Quantity = parseFloat($(tr).find('td:eq(1)').text());
-                    //alert($Quantity)
-                    //console.log($Quantity)
-                    var $Price = parseFloat($(tr).find('td:eq(2)').text());
-                    var $Discount = parseFloat($(tr).find('td:eq(3)').text());
-                    var $TotalAmount = parseFloat($(tr).find('td:eq(5)').text());
+                    var $Quantity = $(tr).find('td:eq(1)').text();
+
+                    var $Price = $(tr).find('td:eq(2)').text();
+
+                    var $Discount = $(tr).find('td:eq(3)').text();
+
+                    var $TotalAmount = $(tr).find('td:eq(5)').text();
 
                     var $subtotal = 0;
                     var $discount = 0;
 
                     $subtotal = $Quantity * $Price;
 
-                    $discount = $subtotal - (($Discount / 100) * $subtotal);
+                    $discount = (($Discount / 100) * $subtotal);
 
                     Discount += $discount;
 
                     Sub_Total += $subtotal;
-                    TotalAmount += value;
 
+                    TotalAmount += Number($TotalAmount);
+
+                    $("#Quantity").val(0);
+                    $("#Price").val(0);
+                    $("#Discount").val(0);
+                    $("#Tot").val(0);
 
                 });
             });
             $("#Sub_Total").val(Sub_Total.toFixed(2))
             $("#DiscountAmount").val(Discount.toFixed(2))
-            $("#Total").val(TotalAmount.toFixed(2))
             $("#TaxAmount").val(Tax.toFixed(2))
-
-        });
+            $("#Total").val(TotalAmount.toFixed(2))
+        }
 
         $("#invoice_items").on('click', '#btnRemove', function () {
             $(this).closest('tr').remove();
+            calculations();
         });
         $("#submit").click(function (e) {
             e.preventDefault();
@@ -345,7 +357,11 @@
         var Address = $("#Address").val();
         var OrderDate = $("#OrderDate").val();
         var CreatedOn = $("#CreatedOn").val();
-        var PaymentTerm = $("#PaymentTerm").val();
+        var DueDate = $("#DueDate").val();
+        var Sub_Total = $("#Sub_Total").val();
+        var DiscountAmount = $("#DiscountAmount").val();
+        var TaxAmount = $("#TaxAmount").val();
+        var Total = $("#Total").val();
 
 
         listOfInvoiceDetailsModel.shift();
@@ -359,7 +375,11 @@
             "Address": Address,
             "OrderDate": OrderDate,
             "CreatedOn": CreatedOn,
-            "PaymentTerm": PaymentTerm
+            "DueDate": DueDate,
+            "Sub_Total": Sub_Total,
+            "DiscountAmount": DiscountAmount,
+            "TaxAmount": TaxAmount,
+            "Total": Total,
         }
 
 
@@ -389,7 +409,11 @@
     }
 
     const myDatePicker = MCDatepicker.create({
-        el: '#OrderDate',
+        el: '#OrderDate'
+    })
+
+    const myDatePicker2 = MCDatepicker.create({
+        el: '#DueDate',
     })
 </script>
 

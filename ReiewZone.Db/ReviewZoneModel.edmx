@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ReviewZoneDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ReviewZoneDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="Account_No" />
@@ -12,7 +12,7 @@
           <Property Name="Account_No" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Emp_ID" Type="int" />
           <Property Name="AccountTitle" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="Description" Type="varchar" MaxLength="30" />
+          <Property Name="Description" Type="varchar(max)" />
           <Property Name="InitialBalance" Type="float" Nullable="false" />
           <Property Name="AccountNumber" Type="int" Nullable="false" />
           <Property Name="Phone" Type="varchar" MaxLength="15" />
@@ -143,7 +143,7 @@
           <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Address" Type="varchar" MaxLength="50" />
           <Property Name="OrderDate" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="PaymentTerm" Type="varchar" MaxLength="50" />
+          <Property Name="DueDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime2" Precision="7" />
           <Property Name="Sub_Total" Type="float" />
           <Property Name="DiscountAmount" Type="float" />
@@ -169,7 +169,7 @@
           <Property Name="Order_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemNumber" Type="int" />
           <Property Name="Emp_ID" Type="int" />
-          <Property Name="Customer_ID" Type="int" Nullable="false" />
+          <Property Name="Customer_ID" Type="int" />
           <Property Name="Status" Type="varchar" MaxLength="50" />
           <Property Name="BillingCycle" Type="varchar" MaxLength="50" />
           <Property Name="Total" Type="float" />
@@ -181,7 +181,7 @@
           <Property Name="OrderDetailsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemNumber" Type="int" Nullable="false" />
           <Property Name="Order_ID" Type="int" Nullable="false" />
-          <Property Name="UnitPrice" Type="float" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Product">
@@ -233,7 +233,7 @@
             <PropertyRef Name="Task_ID" />
           </Key>
           <Property Name="Task_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Emp_ID" Type="int" />
+          <Property Name="Evaluator_ID" Type="int" />
           <Property Name="TaskName" Type="varchar" MaxLength="50" />
           <Property Name="AssignedTo" Type="int" />
           <Property Name="DueDate" Type="datetime2" Precision="7" Nullable="false" />
@@ -250,7 +250,7 @@
           <Property Name="NextDueDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="RepeatEvery" Type="varchar" MaxLength="50" />
           <Property Name="Currency" Type="varchar" MaxLength="50" />
-          <Property Name="Amount" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="FromAccount" Type="int" Nullable="false" />
           <Property Name="Payee" Type="int" Nullable="false" />
           <Property Name="Category" Type="varchar" MaxLength="50" />
@@ -436,7 +436,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Order_Customer">
-          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
@@ -557,7 +557,19 @@
               <PropertyRef Name="Emp_ID" />
             </Principal>
             <Dependent Role="Tasks">
-              <PropertyRef Name="Emp_ID" />
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tasks_Evaluator">
+          <End Role="Evaluator" Type="Self.Evaluator" Multiplicity="0..1" />
+          <End Role="Tasks" Type="Self.Tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Evaluator">
+              <PropertyRef Name="Evaluator_ID" />
+            </Principal>
+            <Dependent Role="Tasks">
+              <PropertyRef Name="Evaluator_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -717,6 +729,10 @@
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Tasks" EntitySet="Tasks" />
           </AssociationSet>
+          <AssociationSet Name="FK_Tasks_Evaluator" Association="Self.FK_Tasks_Evaluator">
+            <End Role="Evaluator" EntitySet="Evaluator" />
+            <End Role="Tasks" EntitySet="Tasks" />
+          </AssociationSet>
           <AssociationSet Name="FK_Voucher_Account" Association="Self.FK_Voucher_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="Voucher" EntitySet="Voucher" />
@@ -730,161 +746,35 @@
             <End Role="Voucher" EntitySet="Voucher" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ReviewZoneDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="Account">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="Account_No" />
           </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Account_No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Emp_ID" Type="Int32" />
+          <Property Name="AccountTitle" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="InitialBalance" Type="Double" Nullable="false" />
+          <Property Name="AccountNumber" Type="Int32" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Account_Employee" FromRole="Account" ToRole="Employee" />
+          <NavigationProperty Name="Deposit" Relationship="Self.FK_Deposit_Account" FromRole="Account" ToRole="Deposit" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_Account" FromRole="Account" ToRole="Expense" />
+          <NavigationProperty Name="Voucher" Relationship="Self.FK_Voucher_Account" FromRole="Account" ToRole="Voucher" />
         </EntityType>
-        <EntityContainer Name="ReviewZoneDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="AccountLogin" EntityType="ReviewZoneDBModel.AccountLogin" />
-          <EntitySet Name="Admin" EntityType="ReviewZoneDBModel.Admin" />
-          <EntitySet Name="Customer" EntityType="ReviewZoneDBModel.Customer" />
-          <EntitySet Name="Evaluation" EntityType="ReviewZoneDBModel.Evaluation" />
-          <EntitySet Name="Evaluator" EntityType="ReviewZoneDBModel.Evaluator" />
-          <EntitySet Name="Invoice" EntityType="ReviewZoneDBModel.Invoice" />
-          <EntitySet Name="InvoiceDetails" EntityType="ReviewZoneDBModel.InvoiceDetails" />
-          <EntitySet Name="Order" EntityType="ReviewZoneDBModel.Order" />
-          <EntitySet Name="Product" EntityType="ReviewZoneDBModel.Product" />
-          <EntitySet Name="RoleType" EntityType="ReviewZoneDBModel.RoleType" />
-          <EntitySet Name="SalesForecast" EntityType="ReviewZoneDBModel.SalesForecast" />
-          <EntitySet Name="Tasks" EntityType="ReviewZoneDBModel.Tasks" />
-          <EntitySet Name="Voucher" EntityType="ReviewZoneDBModel.Voucher" />
-          <AssociationSet Name="FK_RoleType_Login" Association="ReviewZoneDBModel.FK_RoleType_Login">
-            <End Role="AccountLogin" EntitySet="AccountLogin" />
-            <End Role="RoleType" EntitySet="RoleType" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Invoice_Customer" Association="ReviewZoneDBModel.FK_Invoice_Customer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="Invoice" EntitySet="Invoice" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Order_Customer" Association="ReviewZoneDBModel.FK_Order_Customer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="Order" EntitySet="Order" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Voucher_Prep" Association="ReviewZoneDBModel.FK_Voucher_Prep">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="Voucher" EntitySet="Voucher" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Evaluation_Evaluator" Association="ReviewZoneDBModel.FK_Evaluation_Evaluator">
-            <End Role="Evaluator" EntitySet="Evaluator" />
-            <End Role="Evaluation" EntitySet="Evaluation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Evaluation_Task" Association="ReviewZoneDBModel.FK_Evaluation_Task">
-            <End Role="Tasks" EntitySet="Tasks" />
-            <End Role="Evaluation" EntitySet="Evaluation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductInvoice_Invoice" Association="ReviewZoneDBModel.FK_ProductInvoice_Invoice">
-            <End Role="Invoice" EntitySet="Invoice" />
-            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductInvoice_Product" Association="ReviewZoneDBModel.FK_ProductInvoice_Product">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SalesForecast_Product" Association="ReviewZoneDBModel.FK_SalesForecast_Product">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="SalesForecast" EntitySet="SalesForecast" />
-          </AssociationSet>
-          <EntitySet Name="OrderDetails" EntityType="ReviewZoneDBModel.OrderDetails" />
-          <AssociationSet Name="FK_OrderDetails_Order" Association="ReviewZoneDBModel.FK_OrderDetails_Order">
-            <End Role="Order" EntitySet="Order" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductOrder_Product" Association="ReviewZoneDBModel.FK_ProductOrder_Product">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="OrderDetails" EntitySet="OrderDetails" />
-          </AssociationSet>
-          <EntitySet Name="Account" EntityType="ReviewZoneDBModel.Account" />
-          <AssociationSet Name="FK_Voucher_Account" Association="ReviewZoneDBModel.FK_Voucher_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="Voucher" EntitySet="Voucher" />
-          </AssociationSet>
-          <EntitySet Name="Employee" EntityType="ReviewZoneDBModel.Employee" />
-          <AssociationSet Name="FK_Account_Employee" Association="ReviewZoneDBModel.FK_Account_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Account" EntitySet="Account" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Admin_Employee" Association="ReviewZoneDBModel.FK_Admin_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Admin" EntitySet="Admin" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Customer_Employee" Association="ReviewZoneDBModel.FK_Customer_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Customer" EntitySet="Customer" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Evaluation_Employee" Association="ReviewZoneDBModel.FK_Evaluation_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Evaluation" EntitySet="Evaluation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Evaluator_Employee" Association="ReviewZoneDBModel.FK_Evaluator_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Evaluator" EntitySet="Evaluator" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Invoice_Employee" Association="ReviewZoneDBModel.FK_Invoice_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Invoice" EntitySet="Invoice" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Order_Employee" Association="ReviewZoneDBModel.FK_Order_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Order" EntitySet="Order" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Product_Employee" Association="ReviewZoneDBModel.FK_Product_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Product" EntitySet="Product" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Tasks_Employee" Association="ReviewZoneDBModel.FK_Tasks_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Tasks" EntitySet="Tasks" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Voucher_Employee" Association="ReviewZoneDBModel.FK_Voucher_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Voucher" EntitySet="Voucher" />
-          </AssociationSet>
-          <EntitySet Name="Deposit" EntityType="ReviewZoneDBModel.Deposit" />
-          <EntitySet Name="Expense" EntityType="ReviewZoneDBModel.Expense" />
-          <AssociationSet Name="FK_Deposit_Account" Association="ReviewZoneDBModel.FK_Deposit_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="Deposit" EntitySet="Deposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Expense_Account" Association="ReviewZoneDBModel.FK_Expense_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="Expense" EntitySet="Expense" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Deposit_Customer" Association="ReviewZoneDBModel.FK_Deposit_Customer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="Deposit" EntitySet="Deposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Expense_Customer" Association="ReviewZoneDBModel.FK_Expense_Customer">
-            <End Role="Customer" EntitySet="Customer" />
-            <End Role="Expense" EntitySet="Expense" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Deposit_Employee" Association="ReviewZoneDBModel.FK_Deposit_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Deposit" EntitySet="Deposit" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Expense_Employee" Association="ReviewZoneDBModel.FK_Expense_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="Expense" EntitySet="Expense" />
-          </AssociationSet>
-          </EntityContainer>
         <EntityType Name="AccountLogin">
           <Key>
             <PropertyRef Name="Login_ID" />
           </Key>
           <Property Name="Login_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="RoleType" Relationship="ReviewZoneDBModel.FK_RoleType_Login" FromRole="AccountLogin" ToRole="RoleType" />
+          <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RoleType" Relationship="Self.FK_RoleType_Login" FromRole="AccountLogin" ToRole="RoleType" />
         </EntityType>
         <EntityType Name="Admin">
           <Key>
@@ -893,7 +783,7 @@
           <Property Name="Admin_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Emp_ID" Type="Int32" />
           <Property Name="Education" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Admin_Employee" FromRole="Admin" ToRole="Employee" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Admin_Employee" FromRole="Admin" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -901,8 +791,8 @@
           </Key>
           <Property Name="Customer_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SecondaryEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -913,12 +803,65 @@
           <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="BusinessNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Group" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Invoice" Relationship="ReviewZoneDBModel.FK_Invoice_Customer" FromRole="Customer" ToRole="Invoice" />
-          <NavigationProperty Name="Order" Relationship="ReviewZoneDBModel.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
-          <NavigationProperty Name="Voucher" Relationship="ReviewZoneDBModel.FK_Voucher_Prep" FromRole="Customer" ToRole="Voucher" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Customer_Employee" FromRole="Customer" ToRole="Employee" />
-          <NavigationProperty Name="Deposit" Relationship="ReviewZoneDBModel.FK_Deposit_Customer" FromRole="Customer" ToRole="Deposit" />
-          <NavigationProperty Name="Expense" Relationship="ReviewZoneDBModel.FK_Expense_Customer" FromRole="Customer" ToRole="Expense" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Customer_Employee" FromRole="Customer" ToRole="Employee" />
+          <NavigationProperty Name="Deposit" Relationship="Self.FK_Deposit_Customer" FromRole="Customer" ToRole="Deposit" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_Customer" FromRole="Customer" ToRole="Expense" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK_Invoice_Customer" FromRole="Customer" ToRole="Invoice" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_Customer" FromRole="Customer" ToRole="Order" />
+          <NavigationProperty Name="Voucher" Relationship="Self.FK_Voucher_Prep" FromRole="Customer" ToRole="Voucher" />
+        </EntityType>
+        <EntityType Name="Deposit">
+          <Key>
+            <PropertyRef Name="Deposit_ID" />
+          </Key>
+          <Property Name="Deposit_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Account_No" Type="Int32" Nullable="false" />
+          <Property Name="Emp_ID" Type="Int32" />
+          <Property Name="Customer_ID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Company" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Method" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Deposit_Account" FromRole="Deposit" ToRole="Account" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Deposit_Customer" FromRole="Deposit" ToRole="Customer" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Deposit_Employee" FromRole="Deposit" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Emp_ID" />
+          </Key>
+          <Property Name="Emp_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SecondaryEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="JobTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="PayFrequency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Salary" Type="Double" Nullable="false" />
+          <Property Name="Summary" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Account_Employee" FromRole="Employee" ToRole="Account" />
+          <NavigationProperty Name="Admin" Relationship="Self.FK_Admin_Employee" FromRole="Employee" ToRole="Admin" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Customer_Employee" FromRole="Employee" ToRole="Customer" />
+          <NavigationProperty Name="Deposit" Relationship="Self.FK_Deposit_Employee" FromRole="Employee" ToRole="Deposit" />
+          <NavigationProperty Name="Evaluation" Relationship="Self.FK_Evaluation_Employee" FromRole="Employee" ToRole="Evaluation" />
+          <NavigationProperty Name="Evaluator" Relationship="Self.FK_Evaluator_Employee" FromRole="Employee" ToRole="Evaluator" />
+          <NavigationProperty Name="Expense" Relationship="Self.FK_Expense_Employee" FromRole="Employee" ToRole="Expense" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK_Invoice_Employee" FromRole="Employee" ToRole="Invoice" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_Employee" FromRole="Employee" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Product_Employee" FromRole="Employee" ToRole="Product" />
+          <NavigationProperty Name="Tasks" Relationship="Self.FK_Tasks_Employee" FromRole="Employee" ToRole="Tasks" />
+          <NavigationProperty Name="Voucher" Relationship="Self.FK_Voucher_Employee" FromRole="Employee" ToRole="Voucher" />
         </EntityType>
         <EntityType Name="Evaluation">
           <Key>
@@ -935,9 +878,9 @@
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="Performance" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Remarks" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Evaluator" Relationship="ReviewZoneDBModel.FK_Evaluation_Evaluator" FromRole="Evaluation" ToRole="Evaluator" />
-          <NavigationProperty Name="Tasks" Relationship="ReviewZoneDBModel.FK_Evaluation_Task" FromRole="Evaluation" ToRole="Tasks" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Evaluation_Employee" FromRole="Evaluation" ToRole="Employee" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Evaluation_Employee" FromRole="Evaluation" ToRole="Employee" />
+          <NavigationProperty Name="Evaluator" Relationship="Self.FK_Evaluation_Evaluator" FromRole="Evaluation" ToRole="Evaluator" />
+          <NavigationProperty Name="Tasks" Relationship="Self.FK_Evaluation_Task" FromRole="Evaluation" ToRole="Tasks" />
         </EntityType>
         <EntityType Name="Evaluator">
           <Key>
@@ -945,480 +888,11 @@
           </Key>
           <Property Name="Evaluator_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Emp_ID" Type="Int32" Nullable="false" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Evaluation" Relationship="ReviewZoneDBModel.FK_Evaluation_Evaluator" FromRole="Evaluator" ToRole="Evaluation" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Evaluator_Employee" FromRole="Evaluator" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="Invoice">
-          <Key>
-            <PropertyRef Name="InvoiceNumber" />
-          </Key>
-          <Property Name="InvoiceNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="ItemNumber" Type="Int32" />
-          <Property Name="Customer_ID" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="PaymentTerm" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="7" />
-          <Property Name="Sub_Total" Type="Double" />
-          <Property Name="DiscountAmount" Type="Double" />
-          <Property Name="Total" Type="Double" />
-          <NavigationProperty Name="Customer" Relationship="ReviewZoneDBModel.FK_Invoice_Customer" FromRole="Invoice" ToRole="Customer" />
-          <NavigationProperty Name="InvoiceDetails" Relationship="ReviewZoneDBModel.FK_ProductInvoice_Invoice" FromRole="Invoice" ToRole="InvoiceDetails" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Invoice_Employee" FromRole="Invoice" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="InvoiceDetails">
-          <Key>
-            <PropertyRef Name="InvoiceDetailsID" />
-          </Key>
-          <Property Name="InvoiceDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InvoiceNumber" Type="Int32" Nullable="false" />
-          <Property Name="ItemNumber" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="Tax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Total" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Invoice" Relationship="ReviewZoneDBModel.FK_ProductInvoice_Invoice" FromRole="InvoiceDetails" ToRole="Invoice" />
-          <NavigationProperty Name="Product" Relationship="ReviewZoneDBModel.FK_ProductInvoice_Product" FromRole="InvoiceDetails" ToRole="Product" />
-        </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="Order_ID" />
-          </Key>
-          <Property Name="Order_ID" Type="Int32" Nullable="false" />
-          <Property Name="ItemNumber" Type="Int32" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="Customer_ID" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BillingCycle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Total" Type="Double" />
-          <NavigationProperty Name="Customer" Relationship="ReviewZoneDBModel.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
-          <NavigationProperty Name="OrderDetails" Relationship="ReviewZoneDBModel.FK_OrderDetails_Order" FromRole="Order" ToRole="OrderDetails" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Order_Employee" FromRole="Order" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="Product">
-          <Key>
-            <PropertyRef Name="ItemNumber" />
-          </Key>
-          <Property Name="ItemNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Width" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Length" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Height" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Weight" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="TotalInStock" Type="Int32" Nullable="false" />
-          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="InvoiceDetails" Relationship="ReviewZoneDBModel.FK_ProductInvoice_Product" FromRole="Product" ToRole="InvoiceDetails" />
-          <NavigationProperty Name="SalesForecast" Relationship="ReviewZoneDBModel.FK_SalesForecast_Product" FromRole="Product" ToRole="SalesForecast" />
-          <NavigationProperty Name="OrderDetails" Relationship="ReviewZoneDBModel.FK_ProductOrder_Product" FromRole="Product" ToRole="OrderDetails" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Product_Employee" FromRole="Product" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="RoleType">
-          <Key>
-            <PropertyRef Name="Role_ID" />
-          </Key>
-          <Property Name="Role_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="User_ID" Type="Int32" Nullable="false" />
-          <Property Name="Category" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AccountLogin" Relationship="ReviewZoneDBModel.FK_RoleType_Login" FromRole="RoleType" ToRole="AccountLogin" />
-        </EntityType>
-        <EntityType Name="SalesForecast">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemNumber" Type="Int32" />
-          <NavigationProperty Name="Product" Relationship="ReviewZoneDBModel.FK_SalesForecast_Product" FromRole="SalesForecast" ToRole="Product" />
-        </EntityType>
-        <EntityType Name="Tasks">
-          <Key>
-            <PropertyRef Name="Task_ID" />
-          </Key>
-          <Property Name="Task_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="TaskName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AssignedTo" Type="Int32" />
-          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Evaluation" Relationship="ReviewZoneDBModel.FK_Evaluation_Task" FromRole="Tasks" ToRole="Evaluation" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Tasks_Employee" FromRole="Tasks" ToRole="Employee" />
-        </EntityType>
-        <EntityType Name="Voucher">
-          <Key>
-            <PropertyRef Name="Voucher_No" />
-          </Key>
-          <Property Name="Voucher_No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="NextDueDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="RepeatEvery" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Amount" Type="Int32" Nullable="false" />
-          <Property Name="FromAccount" Type="Int32" Nullable="false" />
-          <Property Name="Payee" Type="Int32" Nullable="false" />
-          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Customer" Relationship="ReviewZoneDBModel.FK_Voucher_Prep" FromRole="Voucher" ToRole="Customer" />
-          <NavigationProperty Name="Account" Relationship="ReviewZoneDBModel.FK_Voucher_Account" FromRole="Voucher" ToRole="Account" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Voucher_Employee" FromRole="Voucher" ToRole="Employee" />
-        </EntityType>
-        <Association Name="FK_RoleType_Login">
-          <End Type="ReviewZoneDBModel.AccountLogin" Role="AccountLogin" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="ReviewZoneDBModel.RoleType" Role="RoleType" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AccountLogin">
-              <PropertyRef Name="Login_ID" />
-            </Principal>
-            <Dependent Role="RoleType">
-              <PropertyRef Name="User_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Invoice_Customer">
-          <End Type="ReviewZoneDBModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Invoice" Role="Invoice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Customer_ID" />
-            </Principal>
-            <Dependent Role="Invoice">
-              <PropertyRef Name="Customer_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Order_Customer">
-          <End Type="ReviewZoneDBModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Order" Role="Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Customer_ID" />
-            </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Customer_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Voucher_Prep">
-          <End Type="ReviewZoneDBModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Voucher" Role="Voucher" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Customer_ID" />
-            </Principal>
-            <Dependent Role="Voucher">
-              <PropertyRef Name="Payee" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Evaluation_Evaluator">
-          <End Type="ReviewZoneDBModel.Evaluator" Role="Evaluator" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Evaluation" Role="Evaluation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Evaluator">
-              <PropertyRef Name="Evaluator_ID" />
-            </Principal>
-            <Dependent Role="Evaluation">
-              <PropertyRef Name="Evaluator_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Evaluation_Task">
-          <End Type="ReviewZoneDBModel.Tasks" Role="Tasks" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Evaluation" Role="Evaluation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tasks">
-              <PropertyRef Name="Task_ID" />
-            </Principal>
-            <Dependent Role="Evaluation">
-              <PropertyRef Name="Task_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductInvoice_Invoice">
-          <End Type="ReviewZoneDBModel.Invoice" Role="Invoice" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.InvoiceDetails" Role="InvoiceDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Invoice">
-              <PropertyRef Name="InvoiceNumber" />
-            </Principal>
-            <Dependent Role="InvoiceDetails">
-              <PropertyRef Name="InvoiceNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductInvoice_Product">
-          <End Type="ReviewZoneDBModel.Product" Role="Product" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.InvoiceDetails" Role="InvoiceDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ItemNumber" />
-            </Principal>
-            <Dependent Role="InvoiceDetails">
-              <PropertyRef Name="ItemNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SalesForecast_Product">
-          <End Type="ReviewZoneDBModel.Product" Role="Product" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.SalesForecast" Role="SalesForecast" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ItemNumber" />
-            </Principal>
-            <Dependent Role="SalesForecast">
-              <PropertyRef Name="ItemNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="OrderDetails">
-          <Key>
-            <PropertyRef Name="OrderDetailsID" />
-          </Key>
-          <Property Name="OrderDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ItemNumber" Type="Int32" Nullable="false" />
-          <Property Name="Order_ID" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="ReviewZoneDBModel.FK_OrderDetails_Order" FromRole="OrderDetails" ToRole="Order" />
-          <NavigationProperty Name="Product" Relationship="ReviewZoneDBModel.FK_ProductOrder_Product" FromRole="OrderDetails" ToRole="Product" />
-        </EntityType>
-        <Association Name="FK_OrderDetails_Order">
-          <End Type="ReviewZoneDBModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.OrderDetails" Role="OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="Order_ID" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="Order_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ProductOrder_Product">
-          <End Type="ReviewZoneDBModel.Product" Role="Product" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.OrderDetails" Role="OrderDetails" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="ItemNumber" />
-            </Principal>
-            <Dependent Role="OrderDetails">
-              <PropertyRef Name="ItemNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Account">
-          <Key>
-            <PropertyRef Name="Account_No" />
-          </Key>
-          <Property Name="Account_No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="AccountTitle" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="InitialBalance" Type="Double" Nullable="false" />
-          <Property Name="AccountNumber" Type="Int32" Nullable="false" />
-          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Voucher" Relationship="ReviewZoneDBModel.FK_Voucher_Account" FromRole="Account" ToRole="Voucher" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Account_Employee" FromRole="Account" ToRole="Employee" />
-          <NavigationProperty Name="Deposit" Relationship="ReviewZoneDBModel.FK_Deposit_Account" FromRole="Account" ToRole="Deposit" />
-          <NavigationProperty Name="Expense" Relationship="ReviewZoneDBModel.FK_Expense_Account" FromRole="Account" ToRole="Expense" />
-        </EntityType>
-        <Association Name="FK_Voucher_Account">
-          <End Type="ReviewZoneDBModel.Account" Role="Account" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Voucher" Role="Voucher" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="Account_No" />
-            </Principal>
-            <Dependent Role="Voucher">
-              <PropertyRef Name="FromAccount" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Employee">
-          <Key>
-            <PropertyRef Name="Emp_ID" />
-          </Key>
-          <Property Name="Emp_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FullName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="SecondaryEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Department" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="JobTitle" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="PayFrequency" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Salary" Type="Double" Nullable="false" />
-          <Property Name="Summary" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Account" Relationship="ReviewZoneDBModel.FK_Account_Employee" FromRole="Employee" ToRole="Account" />
-          <NavigationProperty Name="Admin" Relationship="ReviewZoneDBModel.FK_Admin_Employee" FromRole="Employee" ToRole="Admin" />
-          <NavigationProperty Name="Customer" Relationship="ReviewZoneDBModel.FK_Customer_Employee" FromRole="Employee" ToRole="Customer" />
-          <NavigationProperty Name="Evaluation" Relationship="ReviewZoneDBModel.FK_Evaluation_Employee" FromRole="Employee" ToRole="Evaluation" />
-          <NavigationProperty Name="Evaluator" Relationship="ReviewZoneDBModel.FK_Evaluator_Employee" FromRole="Employee" ToRole="Evaluator" />
-          <NavigationProperty Name="Invoice" Relationship="ReviewZoneDBModel.FK_Invoice_Employee" FromRole="Employee" ToRole="Invoice" />
-          <NavigationProperty Name="Order" Relationship="ReviewZoneDBModel.FK_Order_Employee" FromRole="Employee" ToRole="Order" />
-          <NavigationProperty Name="Product" Relationship="ReviewZoneDBModel.FK_Product_Employee" FromRole="Employee" ToRole="Product" />
-          <NavigationProperty Name="Tasks" Relationship="ReviewZoneDBModel.FK_Tasks_Employee" FromRole="Employee" ToRole="Tasks" />
-          <NavigationProperty Name="Voucher" Relationship="ReviewZoneDBModel.FK_Voucher_Employee" FromRole="Employee" ToRole="Voucher" />
-          <NavigationProperty Name="Deposit" Relationship="ReviewZoneDBModel.FK_Deposit_Employee" FromRole="Employee" ToRole="Deposit" />
-          <NavigationProperty Name="Expense" Relationship="ReviewZoneDBModel.FK_Expense_Employee" FromRole="Employee" ToRole="Expense" />
-        </EntityType>
-        <Association Name="FK_Account_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Account" Role="Account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Account">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Admin_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Admin" Role="Admin" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Admin">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Customer_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Customer" Role="Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Evaluation_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Evaluation" Role="Evaluation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Evaluation">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Evaluator_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Evaluator" Role="Evaluator" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Evaluator">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Invoice_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Invoice" Role="Invoice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Invoice">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Order_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Order" Role="Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Product_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Product" Role="Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Tasks_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Tasks" Role="Tasks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Tasks">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Voucher_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Voucher" Role="Voucher" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="Emp_ID" />
-            </Principal>
-            <Dependent Role="Voucher">
-              <PropertyRef Name="Emp_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Deposit">
-          <Key>
-            <PropertyRef Name="Deposit_ID" />
-          </Key>
-          <Property Name="Deposit_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Account_No" Type="Int32" Nullable="false" />
-          <Property Name="Emp_ID" Type="Int32" />
-          <Property Name="Customer_ID" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Company" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Method" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Account" Relationship="ReviewZoneDBModel.FK_Deposit_Account" FromRole="Deposit" ToRole="Account" />
-          <NavigationProperty Name="Customer" Relationship="ReviewZoneDBModel.FK_Deposit_Customer" FromRole="Deposit" ToRole="Customer" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Deposit_Employee" FromRole="Deposit" ToRole="Employee" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Evaluator_Employee" FromRole="Evaluator" ToRole="Employee" />
+          <NavigationProperty Name="Evaluation" Relationship="Self.FK_Evaluation_Evaluator" FromRole="Evaluator" ToRole="Evaluation" />
+          <NavigationProperty Name="Tasks" Relationship="Self.FK_Tasks_Evaluator" FromRole="Evaluator" ToRole="Tasks" />
         </EntityType>
         <EntityType Name="Expense">
           <Key>
@@ -1433,15 +907,173 @@
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Company" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Method" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Account" Relationship="ReviewZoneDBModel.FK_Expense_Account" FromRole="Expense" ToRole="Account" />
-          <NavigationProperty Name="Customer" Relationship="ReviewZoneDBModel.FK_Expense_Customer" FromRole="Expense" ToRole="Customer" />
-          <NavigationProperty Name="Employee" Relationship="ReviewZoneDBModel.FK_Expense_Employee" FromRole="Expense" ToRole="Employee" />
+          <Property Name="Method" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Expense_Account" FromRole="Expense" ToRole="Account" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Expense_Customer" FromRole="Expense" ToRole="Customer" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Expense_Employee" FromRole="Expense" ToRole="Employee" />
         </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceNumber" />
+          </Key>
+          <Property Name="InvoiceNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Emp_ID" Type="Int32" />
+          <Property Name="ItemNumber" Type="Int32" />
+          <Property Name="Customer_ID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="7" />
+          <Property Name="Sub_Total" Type="Double" />
+          <Property Name="DiscountAmount" Type="Double" />
+          <Property Name="Total" Type="Double" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Invoice_Customer" FromRole="Invoice" ToRole="Customer" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Invoice_Employee" FromRole="Invoice" ToRole="Employee" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK_ProductInvoice_Invoice" FromRole="Invoice" ToRole="InvoiceDetails" />
+        </EntityType>
+        <EntityType Name="InvoiceDetails">
+          <Key>
+            <PropertyRef Name="InvoiceDetailsID" />
+          </Key>
+          <Property Name="InvoiceDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNumber" Type="Int32" Nullable="false" />
+          <Property Name="ItemNumber" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Discount" Type="Double" />
+          <Property Name="Tax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK_ProductInvoice_Invoice" FromRole="InvoiceDetails" ToRole="Invoice" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_ProductInvoice_Product" FromRole="InvoiceDetails" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Order_ID" />
+          </Key>
+          <Property Name="Order_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemNumber" Type="Int32" />
+          <Property Name="Emp_ID" Type="Int32" />
+          <Property Name="Customer_ID" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillingCycle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Total" Type="Double" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Order_Customer" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Order_Employee" FromRole="Order" ToRole="Employee" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_OrderDetails_Order" FromRole="Order" ToRole="OrderDetails" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderDetailsID" />
+          </Key>
+          <Property Name="OrderDetailsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemNumber" Type="Int32" Nullable="false" />
+          <Property Name="Order_ID" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_OrderDetails_Order" FromRole="OrderDetails" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_ProductOrder_Product" FromRole="OrderDetails" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ItemNumber" />
+          </Key>
+          <Property Name="ItemNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Emp_ID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Width" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Length" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Height" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Weight" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TotalInStock" Type="Int32" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Product_Employee" FromRole="Product" ToRole="Employee" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK_ProductInvoice_Product" FromRole="Product" ToRole="InvoiceDetails" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK_ProductOrder_Product" FromRole="Product" ToRole="OrderDetails" />
+          <NavigationProperty Name="SalesForecast" Relationship="Self.FK_SalesForecast_Product" FromRole="Product" ToRole="SalesForecast" />
+        </EntityType>
+        <EntityType Name="RoleType">
+          <Key>
+            <PropertyRef Name="Role_ID" />
+          </Key>
+          <Property Name="Role_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="User_ID" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AccountLogin" Relationship="Self.FK_RoleType_Login" FromRole="RoleType" ToRole="AccountLogin" />
+        </EntityType>
+        <EntityType Name="SalesForecast">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemNumber" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_SalesForecast_Product" FromRole="SalesForecast" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tasks">
+          <Key>
+            <PropertyRef Name="Task_ID" />
+          </Key>
+          <Property Name="Task_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Evaluator_ID" Type="Int32" />
+          <Property Name="TaskName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AssignedTo" Type="Int32" />
+          <Property Name="DueDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Tasks_Employee" FromRole="Tasks" ToRole="Employee" />
+          <NavigationProperty Name="Evaluation" Relationship="Self.FK_Evaluation_Task" FromRole="Tasks" ToRole="Evaluation" />
+          <NavigationProperty Name="Evaluator" Relationship="Self.FK_Tasks_Evaluator" FromRole="Tasks" ToRole="Evaluator" />
+        </EntityType>
+        <EntityType Name="Voucher">
+          <Key>
+            <PropertyRef Name="Voucher_No" />
+          </Key>
+          <Property Name="Voucher_No" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Emp_ID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NextDueDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="RepeatEvery" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="FromAccount" Type="Int32" Nullable="false" />
+          <Property Name="Payee" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Voucher_Account" FromRole="Voucher" ToRole="Account" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Voucher_Prep" FromRole="Voucher" ToRole="Customer" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Voucher_Employee" FromRole="Voucher" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Account_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Deposit_Account">
-          <End Type="ReviewZoneDBModel.Account" Role="Account" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Deposit" Role="Deposit" Multiplicity="*" />
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Deposit" Type="Self.Deposit" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
               <PropertyRef Name="Account_No" />
@@ -1452,8 +1084,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Expense_Account">
-          <End Type="ReviewZoneDBModel.Account" Role="Account" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Expense" Role="Expense" Multiplicity="*" />
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Account">
               <PropertyRef Name="Account_No" />
@@ -1463,9 +1095,59 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Voucher_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Voucher" Type="Self.Voucher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Account_No" />
+            </Principal>
+            <Dependent Role="Voucher">
+              <PropertyRef Name="FromAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RoleType_Login">
+          <End Role="AccountLogin" Type="Self.AccountLogin" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="RoleType" Type="Self.RoleType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountLogin">
+              <PropertyRef Name="Login_ID" />
+            </Principal>
+            <Dependent Role="RoleType">
+              <PropertyRef Name="User_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Admin_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Admin" Type="Self.Admin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Admin">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Deposit_Customer">
-          <End Type="ReviewZoneDBModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Deposit" Role="Deposit" Multiplicity="*" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Deposit" Type="Self.Deposit" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="Customer_ID" />
@@ -1476,8 +1158,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Expense_Customer">
-          <End Type="ReviewZoneDBModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="ReviewZoneDBModel.Expense" Role="Expense" Multiplicity="*" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="Customer_ID" />
@@ -1487,9 +1169,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Invoice_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_ID" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="Customer_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Customer_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voucher_Prep">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Voucher" Type="Self.Voucher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Customer_ID" />
+            </Principal>
+            <Dependent Role="Voucher">
+              <PropertyRef Name="Payee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Deposit_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Deposit" Role="Deposit" Multiplicity="*" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Deposit" Type="Self.Deposit" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
               <PropertyRef Name="Emp_ID" />
@@ -1499,9 +1217,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Evaluation_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Evaluation" Type="Self.Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Evaluator_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Evaluator" Type="Self.Evaluator" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Evaluator">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Expense_Employee">
-          <End Type="ReviewZoneDBModel.Employee" Role="Employee" Multiplicity="0..1" />
-          <End Type="ReviewZoneDBModel.Expense" Role="Expense" Multiplicity="*" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Expense" Type="Self.Expense" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
               <PropertyRef Name="Emp_ID" />
@@ -1511,12 +1253,538 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <Association Name="FK_Invoice_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tasks_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Tasks" Type="Self.Tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Tasks">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voucher_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Voucher" Type="Self.Voucher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Emp_ID" />
+            </Principal>
+            <Dependent Role="Voucher">
+              <PropertyRef Name="Emp_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Evaluation_Evaluator">
+          <End Role="Evaluator" Type="Self.Evaluator" Multiplicity="1" />
+          <End Role="Evaluation" Type="Self.Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Evaluator">
+              <PropertyRef Name="Evaluator_ID" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="Evaluator_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Evaluation_Task">
+          <End Role="Tasks" Type="Self.Tasks" Multiplicity="1" />
+          <End Role="Evaluation" Type="Self.Evaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tasks">
+              <PropertyRef Name="Task_ID" />
+            </Principal>
+            <Dependent Role="Evaluation">
+              <PropertyRef Name="Task_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tasks_Evaluator">
+          <End Role="Evaluator" Type="Self.Evaluator" Multiplicity="0..1" />
+          <End Role="Tasks" Type="Self.Tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Evaluator">
+              <PropertyRef Name="Evaluator_ID" />
+            </Principal>
+            <Dependent Role="Tasks">
+              <PropertyRef Name="Evaluator_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductInvoice_Invoice">
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceDetails" Type="Self.InvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="InvoiceNumber" />
+            </Principal>
+            <Dependent Role="InvoiceDetails">
+              <PropertyRef Name="InvoiceNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductInvoice_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="InvoiceDetails" Type="Self.InvoiceDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ItemNumber" />
+            </Principal>
+            <Dependent Role="InvoiceDetails">
+              <PropertyRef Name="ItemNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderDetails_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Order_ID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Order_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductOrder_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ItemNumber" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ItemNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SalesForecast_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="SalesForecast" Type="Self.SalesForecast" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ItemNumber" />
+            </Principal>
+            <Dependent Role="SalesForecast">
+              <PropertyRef Name="ItemNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ReviewZoneDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Account" EntityType="Self.Account" />
+          <EntitySet Name="AccountLogin" EntityType="Self.AccountLogin" />
+          <EntitySet Name="Admin" EntityType="Self.Admin" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" />
+          <EntitySet Name="Deposit" EntityType="Self.Deposit" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" />
+          <EntitySet Name="Evaluation" EntityType="Self.Evaluation" />
+          <EntitySet Name="Evaluator" EntityType="Self.Evaluator" />
+          <EntitySet Name="Expense" EntityType="Self.Expense" />
+          <EntitySet Name="Invoice" EntityType="Self.Invoice" />
+          <EntitySet Name="InvoiceDetails" EntityType="Self.InvoiceDetails" />
+          <EntitySet Name="Order" EntityType="Self.Order" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="RoleType" EntityType="Self.RoleType" />
+          <EntitySet Name="SalesForecast" EntityType="Self.SalesForecast" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Tasks" EntityType="Self.Tasks" />
+          <EntitySet Name="Voucher" EntityType="Self.Voucher" />
+          <AssociationSet Name="FK_Account_Employee" Association="Self.FK_Account_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deposit_Account" Association="Self.FK_Deposit_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Deposit" EntitySet="Deposit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_Account" Association="Self.FK_Expense_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voucher_Account" Association="Self.FK_Voucher_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Voucher" EntitySet="Voucher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RoleType_Login" Association="Self.FK_RoleType_Login">
+            <End Role="AccountLogin" EntitySet="AccountLogin" />
+            <End Role="RoleType" EntitySet="RoleType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Admin_Employee" Association="Self.FK_Admin_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Admin" EntitySet="Admin" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_Employee" Association="Self.FK_Customer_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Customer" EntitySet="Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deposit_Customer" Association="Self.FK_Deposit_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Deposit" EntitySet="Deposit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_Customer" Association="Self.FK_Expense_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Customer" Association="Self.FK_Invoice_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Customer" Association="Self.FK_Order_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voucher_Prep" Association="Self.FK_Voucher_Prep">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Voucher" EntitySet="Voucher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deposit_Employee" Association="Self.FK_Deposit_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Deposit" EntitySet="Deposit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Evaluation_Employee" Association="Self.FK_Evaluation_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Evaluation" EntitySet="Evaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Evaluator_Employee" Association="Self.FK_Evaluator_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Evaluator" EntitySet="Evaluator" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Expense_Employee" Association="Self.FK_Expense_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Expense" EntitySet="Expense" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoice_Employee" Association="Self.FK_Invoice_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_Employee" Association="Self.FK_Order_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Employee" Association="Self.FK_Product_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tasks_Employee" Association="Self.FK_Tasks_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Tasks" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voucher_Employee" Association="Self.FK_Voucher_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Voucher" EntitySet="Voucher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Evaluation_Evaluator" Association="Self.FK_Evaluation_Evaluator">
+            <End Role="Evaluator" EntitySet="Evaluator" />
+            <End Role="Evaluation" EntitySet="Evaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Evaluation_Task" Association="Self.FK_Evaluation_Task">
+            <End Role="Tasks" EntitySet="Tasks" />
+            <End Role="Evaluation" EntitySet="Evaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tasks_Evaluator" Association="Self.FK_Tasks_Evaluator">
+            <End Role="Evaluator" EntitySet="Evaluator" />
+            <End Role="Tasks" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductInvoice_Invoice" Association="Self.FK_ProductInvoice_Invoice">
+            <End Role="Invoice" EntitySet="Invoice" />
+            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductInvoice_Product" Association="Self.FK_ProductInvoice_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="InvoiceDetails" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderDetails_Order" Association="Self.FK_OrderDetails_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductOrder_Product" Association="Self.FK_ProductOrder_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SalesForecast_Product" Association="Self.FK_SalesForecast_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SalesForecast" EntitySet="SalesForecast" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ReviewZoneDBModelStoreContainer" CdmEntityContainer="ReviewZoneDBEntities">
+          <EntitySetMapping Name="Account">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Account_No" ColumnName="Account_No" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="AccountTitle" ColumnName="AccountTitle" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="InitialBalance" ColumnName="InitialBalance" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountLogin">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.AccountLogin">
+              <MappingFragment StoreEntitySet="AccountLogin">
+                <ScalarProperty Name="Login_ID" ColumnName="Login_ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Admin">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Admin">
+              <MappingFragment StoreEntitySet="Admin">
+                <ScalarProperty Name="Admin_ID" ColumnName="Admin_ID" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Education" ColumnName="Education" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SecondaryEmail" ColumnName="SecondaryEmail" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="BusinessNumber" ColumnName="BusinessNumber" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deposit">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Deposit">
+              <MappingFragment StoreEntitySet="Deposit">
+                <ScalarProperty Name="Deposit_ID" ColumnName="Deposit_ID" />
+                <ScalarProperty Name="Account_No" ColumnName="Account_No" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="Method" ColumnName="Method" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SecondaryEmail" ColumnName="SecondaryEmail" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="PayFrequency" ColumnName="PayFrequency" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="Summary" ColumnName="Summary" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Evaluation">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Evaluation">
+              <MappingFragment StoreEntitySet="Evaluation">
+                <ScalarProperty Name="Evaluation_ID" ColumnName="Evaluation_ID" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Task_ID" ColumnName="Task_ID" />
+                <ScalarProperty Name="Evaluator_ID" ColumnName="Evaluator_ID" />
+                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
+                <ScalarProperty Name="Timeliness" ColumnName="Timeliness" />
+                <ScalarProperty Name="Quality" ColumnName="Quality" />
+                <ScalarProperty Name="Accuracy" ColumnName="Accuracy" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Performance" ColumnName="Performance" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Evaluator">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Evaluator">
+              <MappingFragment StoreEntitySet="Evaluator">
+                <ScalarProperty Name="Evaluator_ID" ColumnName="Evaluator_ID" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Expense">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Expense">
+              <MappingFragment StoreEntitySet="Expense">
+                <ScalarProperty Name="Expense_ID" ColumnName="Expense_ID" />
+                <ScalarProperty Name="Account_No" ColumnName="Account_No" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="Method" ColumnName="Method" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoice">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Sub_Total" ColumnName="Sub_Total" />
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceDetails">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.InvoiceDetails">
+              <MappingFragment StoreEntitySet="InvoiceDetails">
+                <ScalarProperty Name="InvoiceDetailsID" ColumnName="InvoiceDetailsID" />
+                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="Order_ID" ColumnName="Order_ID" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="BillingCycle" ColumnName="BillingCycle" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.OrderDetails">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderDetailsID" ColumnName="OrderDetailsID" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="Order_ID" ColumnName="Order_ID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TotalInStock" ColumnName="TotalInStock" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RoleType">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.RoleType">
+              <MappingFragment StoreEntitySet="RoleType">
+                <ScalarProperty Name="Role_ID" ColumnName="Role_ID" />
+                <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesForecast">
+            <EntityTypeMapping TypeName="ReviewZoneDBModel.SalesForecast">
+              <MappingFragment StoreEntitySet="SalesForecast">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="ReviewZoneDBModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -1528,265 +1796,36 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AccountLogin">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.AccountLogin">
-              <MappingFragment StoreEntitySet="AccountLogin">
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Login_ID" ColumnName="Login_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Admin">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Admin">
-              <MappingFragment StoreEntitySet="Admin">
-                <ScalarProperty Name="Education" ColumnName="Education" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Admin_ID" ColumnName="Admin_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Customer">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Customer">
-              <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="Group" ColumnName="Group" />
-                <ScalarProperty Name="BusinessNumber" ColumnName="BusinessNumber" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Zip" ColumnName="Zip" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="SecondaryEmail" ColumnName="SecondaryEmail" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Evaluation">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Evaluation">
-              <MappingFragment StoreEntitySet="Evaluation">
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="Performance" ColumnName="Performance" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Accuracy" ColumnName="Accuracy" />
-                <ScalarProperty Name="Quality" ColumnName="Quality" />
-                <ScalarProperty Name="Timeliness" ColumnName="Timeliness" />
-                <ScalarProperty Name="Efficiency" ColumnName="Efficiency" />
-                <ScalarProperty Name="Evaluator_ID" ColumnName="Evaluator_ID" />
-                <ScalarProperty Name="Task_ID" ColumnName="Task_ID" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Evaluation_ID" ColumnName="Evaluation_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Evaluator">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Evaluator">
-              <MappingFragment StoreEntitySet="Evaluator">
-                <ScalarProperty Name="Designation" ColumnName="Designation" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Evaluator_ID" ColumnName="Evaluator_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Invoice">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Invoice">
-              <MappingFragment StoreEntitySet="Invoice">
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
-                <ScalarProperty Name="Sub_Total" ColumnName="Sub_Total" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="PaymentTerm" ColumnName="PaymentTerm" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
-                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="InvoiceDetails">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.InvoiceDetails">
-              <MappingFragment StoreEntitySet="InvoiceDetails">
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="Tax" ColumnName="Tax" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
-                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
-                <ScalarProperty Name="InvoiceDetailsID" ColumnName="InvoiceDetailsID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Order">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Order">
-              <MappingFragment StoreEntitySet="Order">
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="BillingCycle" ColumnName="BillingCycle" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
-                <ScalarProperty Name="Order_ID" ColumnName="Order_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Product">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Product">
-              <MappingFragment StoreEntitySet="Product">
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="TotalInStock" ColumnName="TotalInStock" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="Height" ColumnName="Height" />
-                <ScalarProperty Name="Length" ColumnName="Length" />
-                <ScalarProperty Name="Width" ColumnName="Width" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Brand" ColumnName="Brand" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RoleType">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.RoleType">
-              <MappingFragment StoreEntitySet="RoleType">
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="User_ID" ColumnName="User_ID" />
-                <ScalarProperty Name="Role_ID" ColumnName="Role_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SalesForecast">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.SalesForecast">
-              <MappingFragment StoreEntitySet="SalesForecast">
-                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="ReviewZoneDBModel.Tasks">
               <MappingFragment StoreEntitySet="Tasks">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
-                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
-                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
                 <ScalarProperty Name="Task_ID" ColumnName="Task_ID" />
+                <ScalarProperty Name="Evaluator_ID" ColumnName="Evaluator_ID" />
+                <ScalarProperty Name="TaskName" ColumnName="TaskName" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Voucher">
             <EntityTypeMapping TypeName="ReviewZoneDBModel.Voucher">
               <MappingFragment StoreEntitySet="Voucher">
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Payee" ColumnName="Payee" />
-                <ScalarProperty Name="FromAccount" ColumnName="FromAccount" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="RepeatEvery" ColumnName="RepeatEvery" />
-                <ScalarProperty Name="NextDueDate" ColumnName="NextDueDate" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
                 <ScalarProperty Name="Voucher_No" ColumnName="Voucher_No" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderDetails">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.OrderDetails">
-              <MappingFragment StoreEntitySet="OrderDetails">
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Order_ID" ColumnName="Order_ID" />
-                <ScalarProperty Name="ItemNumber" ColumnName="ItemNumber" />
-                <ScalarProperty Name="OrderDetailsID" ColumnName="OrderDetailsID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Account">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Account">
-              <MappingFragment StoreEntitySet="Account">
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
-                <ScalarProperty Name="InitialBalance" ColumnName="InitialBalance" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="AccountTitle" ColumnName="AccountTitle" />
                 <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Account_No" ColumnName="Account_No" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Employee">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Employee">
-              <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="Summary" ColumnName="Summary" />
-                <ScalarProperty Name="Salary" ColumnName="Salary" />
-                <ScalarProperty Name="PayFrequency" ColumnName="PayFrequency" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
-                <ScalarProperty Name="Department" ColumnName="Department" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Zip" ColumnName="Zip" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="SecondaryEmail" ColumnName="SecondaryEmail" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Deposit">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Deposit">
-              <MappingFragment StoreEntitySet="Deposit">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Method" ColumnName="Method" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NextDueDate" ColumnName="NextDueDate" />
+                <ScalarProperty Name="RepeatEvery" ColumnName="RepeatEvery" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Account_No" ColumnName="Account_No" />
-                <ScalarProperty Name="Deposit_ID" ColumnName="Deposit_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Expense">
-            <EntityTypeMapping TypeName="ReviewZoneDBModel.Expense">
-              <MappingFragment StoreEntitySet="Expense">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Method" ColumnName="Method" />
-                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="FromAccount" ColumnName="FromAccount" />
+                <ScalarProperty Name="Payee" ColumnName="Payee" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Customer_ID" ColumnName="Customer_ID" />
-                <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
-                <ScalarProperty Name="Account_No" ColumnName="Account_No" />
-                <ScalarProperty Name="Expense_ID" ColumnName="Expense_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -143,6 +143,47 @@
                                 </div>
                             </div>
                         </div>
+                        <hr />
+                        <h2>Reports by Month</h2>
+                        <hr>
+                        <div class="panel-container">
+                            <div class="panel-content">
+                                <div class="row mt-3">
+                                    <div style="padding-left: 1.5rem; padding-right: 1.5rem;">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="chart_container">
+                                                    <div id="lineChart"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                            <hr />
+                            <h2>Income by Category</h2>
+                            <hr>
+                            <div>
+                                <div class="panel-container">
+                                    <div class="panel-content">
+                                        <div class="row mt-3">
+                                            <div style="padding-left: 1.5rem; padding-right: 1.5rem;">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div id="center">
+                                                            <div id="chart"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -150,3 +191,92 @@
     </div>
 </main>
 
+<script>
+
+    $(document).ready(function () {
+        var amount = @Html.Raw(Json.Encode(ViewBag.AMOUNT));
+        var date = @Html.Raw(Json.Encode(ViewBag.DATE));
+
+        lineChart(amount, date);
+
+        var count = @Html.Raw(Json.Encode(ViewBag.CATCOUNT));
+        var category = @Html.Raw(Json.Encode(ViewBag.CATLABEL));
+
+        donutChart(count, category);
+
+    });
+    function lineChart(amount, date) {
+        var options = {
+            series: [{
+                name: "Category",
+                data: amount,
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: true
+                }
+            },
+            dataLabels: {
+                enabled: true
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            title: {
+                text: 'Reports by Month',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: date,
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#lineChart"), options);
+        chart.render();
+    }
+
+
+    function donutChart(count, category) {
+
+        var options = {
+            series: count,
+            labels: category,
+            chart: {
+                width: 380,
+                type: 'donut',
+            },
+            dataLabels: {
+                enabled: true
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 400
+                    },
+                    legend: {
+                        show: true
+                    }
+                }
+            }],
+            legend: {
+                position: 'right',
+                offsetY: 0,
+                height: 430,
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    }
+
+
+</script>

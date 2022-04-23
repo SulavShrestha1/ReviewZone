@@ -7,147 +7,220 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows;
 
 namespace ReviewZone.Controllers
 {
+    //Controller class for Evaluation
     [Authorize]
     public class EvaluationController : Controller
     {
+        //Connection to Database
         ReviewZoneDBEntities db = new ReviewZoneDBEntities();
 
+        //Connection to Database Queries(respository) for Evaluation
         EvaluationRespository repository;
+
+        //Creating a constructor to access the repository easily
         public EvaluationController()
         {
             repository = new EvaluationRespository();
         }
 
+        //Creating a public method to access(GET) the list of evaluations from the database
         public List<Evaluation> GetEvaluation()
         {
-            List<Evaluation> evaluationList = db.Evaluation.ToList();
-            return evaluationList;
+            try
+            {
+                List<Evaluation> evaluationList = db.Evaluation.ToList();
+                return evaluationList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a public method to access(GET) the list of employees from the database
         public List<Employee> GetEmployee()
         {
-            List<Employee> employeetList = db.Employee.ToList();
-            return employeetList;
+            try
+            {
+                List<Employee> employeetList = db.Employee.ToList();
+                return employeetList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
-        
+
+        //Creating a public method to access(GET) the list of evaluators from the database
         public List<Evaluator> GetEvaluator()
         {
-            List<Evaluator> evaluatortList = db.Evaluator.ToList();
-            return evaluatortList;
+            try
+            {
+                List<Evaluator> evaluatortList = db.Evaluator.ToList();
+                return evaluatortList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a public method to access(GET) the list of tasks from the database
         public List<Tasks> GetTask()
         {
-            List<Tasks> taskList = db.Tasks.ToList();
-            return taskList;
+            try
+            {
+                List<Tasks> taskList = db.Tasks.ToList();
+                return taskList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to display a view for Evaluation
         public ActionResult Create()
         {
-            var rate = new List<int>() { 1, 2, 3, 4, 5 };
-            ViewBag.rateList = rate;
+            try
+            {
+                var rate = new List<int>() { 1, 2, 3, 4, 5 };
+                ViewBag.rateList = rate;
 
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
-            ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
-            return View();
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
+                ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
+                return View();
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to insert details of Evaluation
         [HttpPost]
         public ActionResult Create(EvaluationModel model)
         {
-            var rate = new List<int>() { 1, 2, 3, 4, 5 };
-            ViewBag.rateList = rate;
-
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
-            ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
-            if (ModelState.IsValid)
+            try
             {
-                int id = repository.AddEvaluation(model);
-                if (id > 0)
+                var rate = new List<int>() { 1, 2, 3, 4, 5 };
+                ViewBag.rateList = rate;
+
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
+                ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
+                if (ModelState.IsValid)
                 {
-                    ModelState.Clear();
-                    ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                    int id = repository.AddEvaluation(model);
+                    if (id > 0)
+                    {
+                        ModelState.Clear();
+                        ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                    }
+                    else
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                    }
                 }
                 else
                 {
                     ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
                 }
+                return View();
             }
-            else
-            {
-                ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
-            }
-            return View();
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to access(GET) the list of Evaluations from the database
         public ActionResult GetAllEvaluation()
         {
-            var result = repository.GetAllEvaluation();
-            return View(result);
+            try
+            {
+                var result = repository.GetAllEvaluation();
+                return View(result);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to access(GET) the detail of individual Evaluation from the database
         public ActionResult Details(int id)
         {
-            var evaluation = repository.GetEvaluation(id);
-            return View(evaluation);
+            try
+            {
+                var evaluation = repository.GetEvaluation(id);
+                return View(evaluation);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to display the view to edit an Evaluation
         public ActionResult Edit(int id)
         {
-            var rate = new List<int>() { 1, 2, 3, 4, 5 };
-            ViewBag.rateList = rate;
+            try
+            {
+                var rate = new List<int>() { 1, 2, 3, 4, 5 };
+                ViewBag.rateList = rate;
 
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
-            ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
-            var evaluation = repository.GetEvaluation(id);
-            return View(evaluation);
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
+                ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
+                var evaluation = repository.GetEvaluation(id);
+                return View(evaluation);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to edit an Evaluation from the database
         [HttpPost]
         public ActionResult Edit(EvaluationModel model)
         {
-            var rate = new List<int>() { 1, 2, 3, 4, 5 };
-            ViewBag.rateList = rate;
-
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
-            ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
-            if (ModelState.IsValid)
+            try
             {
-                if (repository.UpdateEvaluation(model.Evaluation_ID, model))
+                var rate = new List<int>() { 1, 2, 3, 4, 5 };
+                ViewBag.rateList = rate;
+
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.evaluatorList = new SelectList(GetEvaluator(), "Evaluator_ID", "FullName");
+                ViewBag.taskList = new SelectList(GetTask(), "Task_ID", "TaskName");
+                if (ModelState.IsValid)
                 {
-                    ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
-                    return View();
+                    if (repository.UpdateEvaluation(model.Evaluation_ID, model))
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                    }
+
                 }
                 else
                 {
                     ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
                 }
+                return View();
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
 
-            }
-            else
-            {
-                ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
-            }
-            return View();
         }
+
+        //Creating a json result method to delete an Evaluation from the database
         [Authorize(Roles = "Admin, Evaluator")]
         public JsonResult Delete(int id)
         {
-            if (repository.DeleteEvaluation(id))
+            try
             {
-                return Json(new { success = true, responseText = "Poof! Your evaluation has been deleted!" }, JsonRequestBehavior.AllowGet);
+                if (repository.DeleteEvaluation(id))
+                {
+                    return Json(new { success = true, responseText = "Poof! Your evaluation has been deleted!" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, responseText = "The evaluation cannot be deleted." }, JsonRequestBehavior.AllowGet);
+                }
             }
-            else
-            {
-                return Json(new { success = false, responseText = "The evaluation cannot be deleted." }, JsonRequestBehavior.AllowGet);
-            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
     }
 }

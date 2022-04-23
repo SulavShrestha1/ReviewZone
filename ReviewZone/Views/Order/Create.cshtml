@@ -70,10 +70,10 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <div class="form-group data">
-                                                        @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                         <div class="col-md-10">
-                                                            @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control netProd" } })
-                                                            @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                                                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control netProd" } })
+                                                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
                                                 </div>
@@ -120,7 +120,7 @@
                                                 @Html.LabelFor(model => model.Total, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                 <div class="col-md-10">
 
-                                                    @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control netProd" } })
+                                                    @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control netProd", @readonly = "readonly" } })
                                                     @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -167,45 +167,38 @@
 <script>
     $(document).ready(function (e) {
 
-        //$("#Quantity,#Price").change(function () {
-        //    var q = parseInt($("#Quantity").val());
-        //    var p = parseInt($("#Price").val());
-
-        //    var t = (q * p);
-        //    $("#Total").val(t);
-
-        //});
-
 
         $("#btnAdd").click(function (e) {
             e.preventDefault();
-            $("#order_items").append("<tr><td>" + $('#ItemNumber').val() + "</td><td>" + $('#UnitPrice').val() + "</td><td>" + $('#Quantity').val() + "</td>" + `<td><button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
-            //$('#order_items tr').each(function (index, tr) {
-            //    $(tr).each(function () {
-            //        var $tr = $(this);
-            //        var $Quantity = $tr.find('td:eq(1)').text().trim() != "" ? parseInt($tr.find('td:eq(1)').text().trim()) : 0;
-            //        var $Price = $tr.find('td:eq(2)').text().trim() != "" ? parseInt($tr.find('td:eq(2)').text().trim()) : 0;
-            //        var $Discount = $tr.find('td:eq(3)').text().trim() != "" ? parseInt($tr.find('td:eq(3)').text().trim()) : 0;
-            //        var $TotalAmount = $tr.find('td:eq(5)').text().trim() != "" ? parseInt($tr.find('td:eq(5)').text().trim()) : 0;
-
-            //        var $subtotal = 0;
-            //        var $discount = 0;
-            //        $subtotal = $Quantity * $Price;
-
-            //        $discount = $subtotal - (($Discount / 100) * $subtotal);
-
-            //        Discount += $discount;
-
-            //        Sub_Total += $subtotal;
-
-            //        TotalAmount += $TotalAmount;
-
-            //    });
-            //});
+            $("#order_items").append("<tr><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Quantity').val() + "</td>" + `<td><button type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+            calculations();
         });
+
+        function calculations() {
+            var TotalAmount = 0;
+            $('#order_items tr').each(function (index, tr) {
+                $(tr).each(function () {
+
+                    var $Price = $(tr).find('td:eq(1)').text();
+
+                    var $Quantity = $(tr).find('td:eq(2)').text();
+
+                    $subtotal = $Quantity * $Price;
+
+                    TotalAmount += Number($subtotal);
+
+                    $("#Price").val(0);
+                    $("#Quantity").val(0);
+
+                });
+            });
+
+            $("#Total").val(TotalAmount.toFixed(2))
+        }
 
         $("#order_items").on('click', '#btnRemove', function () {
             $(this).closest('tr').remove();
+            calculations();
         });
 
         $("#submit").click(function (e) {
@@ -213,12 +206,6 @@
             SaveRecords();
         });
 
-        //$(document).on('click', '#btnRemove', function (e) {
-        //    e.preventDefault();
-
-        //    let row = $(this).parent().parent().parent();
-        //    $(row).remove();
-        //});
     });
 
     function SaveRecords() {
@@ -229,7 +216,7 @@
 
             $(tr).each(function () {
                 obj['ItemNumber'] = $(tr).find('td:eq(0)').text();
-                obj['UnitPrice'] = $(tr).find('td:eq(1)').text();
+                obj['Price'] = $(tr).find('td:eq(1)').text();
                 obj['Quantity'] = $(tr).find('td:eq(2)').text();
             });
             listOfOrderDetailsModel.push(obj);

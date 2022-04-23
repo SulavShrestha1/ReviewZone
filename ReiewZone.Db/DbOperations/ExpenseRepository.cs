@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace ReviewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Expense
     public class ExpenseRepository
     {
+        //Creating a method to add the details of Expense in the database
         public int AddExpense(ExpenseModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -34,6 +36,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Expensez from the database
         public List<ExpenseModel> GetAllExpense()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -70,6 +73,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Expense from the database
         public ExpenseModel GetExpense(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -105,6 +109,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Expense from the database
         public bool UpdateExpense(int id, ExpenseModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -129,6 +134,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Expense from the database
         public bool DeleteExpense(int id)
         {
             using (var context = new ReviewZoneDBEntities())

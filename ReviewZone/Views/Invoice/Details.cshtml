@@ -12,6 +12,18 @@
                         Invoice -
                         @Html.DisplayFor(model => model.InvoiceNumber)
                     </h2>
+                    <div class="panel-toolbar">
+                        <div class="btn-group flex-wrap" role="group">
+                            <div class="btn-group" role="group">
+                                <a href="@Url.Action("GeneratePDF", "Invoice", new { id = Model.InvoiceNumber })">
+                                    <button href="GeneratePDF" type="button" class="btn btn-success btn-sm waves-effect waves-themed" aria-expanded="false">
+                                        <i class="fas fa-file-pdf-o"></i>
+                                        <span class="d-none d-md-inline">PDF</span>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-container">
                     <div class="panel-content">
@@ -24,23 +36,23 @@
                                             #
                                             @Html.DisplayFor(model => model.InvoiceNumber)
                                         </h4>
-                                        @if (Model.Status == "Unpaid")
-                                        {
+                                                @if (Model.Status == "Unpaid")
+                                                {
                                     <h3 class="alert alert-danger">
                                         @Html.DisplayFor(model => model.Status)
                                     </h3>}
-                                        @if (Model.Status == "Draft")
-                                        {
+                                                @if (Model.Status == "Draft")
+                                                {
                                     <h3 class="alert alert-info">
                                         @Html.DisplayFor(model => model.Status)
-                                    </h3> }
-                                        @if (Model.Status == "Pending")
-                                        {
+                                    </h3>}
+                                                @if (Model.Status == "Pending")
+                                                {
                                     <h3 class="alert alert-primary">
                                         @Html.DisplayFor(model => model.Status)
                                     </h3> }
-                                        else
-                                        {
+                                    else
+                                    {
                                     <h3 class="alert alert-success">
                                         @Html.DisplayFor(model => model.Status)
                                     </h3>}
@@ -137,7 +149,8 @@
                                     $ @Html.DisplayFor(model => item.Total)
                                 </td>
 
-                            </tr>}
+                            </tr>
+}
                                     </tbody>
                                 </table>
                             </div>

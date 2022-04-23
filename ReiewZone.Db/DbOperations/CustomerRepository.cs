@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Customer
     public class CustomerRepository
     {
+        //Creating a method to add the details of Customer in the database
         public int AddCustomer(CustomerModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -37,6 +39,8 @@ namespace ReiewZone.Db.DbOperations
                 return cus.Customer_ID;
             }
         }
+
+        //Creating a method to access(GET) the list of Customer from the database
         public List<CustomerModel> GetAllCustomer()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -69,6 +73,8 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+
+        //Creating a method to access(GET) the details of an Customer from the database
         public CustomerModel GetCustomer(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -102,6 +108,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Customer from the database
         public bool UpdateCustomer(int id, CustomerModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -128,6 +135,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Customer from the database
         public bool DeleteCustomer(int id)
         {
             using (var context = new ReviewZoneDBEntities())

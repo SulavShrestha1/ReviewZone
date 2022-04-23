@@ -17,7 +17,7 @@ namespace ReviewZone.Models
         [Required(ErrorMessage = "The Full Name Field is Required")]
         public string FullName { get; set; }
         [Display(Name = "Phone Number")]
-        [RegularExpression(@"^(\d{10})$", ErrorMessage = "Phone Number is Invalid")]
+        [RegularExpression(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$", ErrorMessage = "Phone Number is Invalid")]
         public string PhoneNumber { get; set; }
         public string Company { get; set; }
         [Display(Name = "Business Number")]

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Order
     public class OrderRepository
     {
+        //Creating a method to add the details of Order in the database
         public int AddOrder(OrderModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -35,7 +37,7 @@ namespace ReiewZone.Db.DbOperations
                     ordDet.Order_ID = Order_ID;
                     ordDet.ItemNumber = item.ItemNumber;
                     ordDet.Quantity = item.Quantity;
-                    ordDet.UnitPrice = item.Price;
+                    ordDet.Price = item.Price;
                     context.OrderDetails.Add(ordDet);
                     context.SaveChanges();
                 }
@@ -44,6 +46,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to add the details of OrderDEtails in the database
         public int AddOrderDetails(OrderDetailsModel model, int Order_ID)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -51,11 +54,11 @@ namespace ReiewZone.Db.DbOperations
 
                 OrderDetails ord = new OrderDetails()
                 {
-                    Order_ID = model.Order_ID,
+                    Order_ID = Order_ID,
                     OrderDetailsID = model.OrderDetailsID,
                     ItemNumber = model.ItemNumber,
                     Quantity = model.Quantity,
-                    UnitPrice = model.Price,
+                    Price = model.Price,
 
                 };
                 context.OrderDetails.Add(ord);
@@ -65,6 +68,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Orders from the database
         public List<OrderModel> GetAllOrder()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -92,6 +96,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of OrderDEtails from the database
         public List<OrderDetailsModel> GetAllOrderDetails(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -103,7 +108,7 @@ namespace ReiewZone.Db.DbOperations
                         OrderDetailsID = x.OrderDetailsID,
                         ItemNumber = x.ItemNumber,
                         Quantity = x.Quantity,
-                        Price = x.UnitPrice,
+                        Price = x.Price,
                         Product = new ProductModel()
                         {
                             Name = x.Product.Name,
@@ -114,6 +119,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Order from the database
         public OrderModel GetOrder(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -133,7 +139,7 @@ namespace ReiewZone.Db.DbOperations
                         Customer = new CustomerModel()
                         {
                             FullName = x.Customer.FullName,
-                        }
+                        },
 
                     }).FirstOrDefault();
 
@@ -141,6 +147,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Order from the database
         public bool UpdateOrder(int id, OrderModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -162,6 +169,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Order from the database
         public bool DeleteOrder(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -186,18 +194,19 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an OrderDetails from the database
         public bool DeleteOrderDetails(int id)
         {
             using (var context = new ReviewZoneDBEntities())
             {
-                var inv = new OrderDetailsModel()
+                var ord = new OrderDetails()
                 {
                     OrderDetailsID = id
                 };
 
                 try
                 {
-                    context.Entry(inv).State = System.Data.Entity.EntityState.Deleted;
+                    context.Entry(ord).State = System.Data.Entity.EntityState.Deleted;
                     context.SaveChanges();
                     return true;
                 }

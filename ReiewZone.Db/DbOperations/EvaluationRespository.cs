@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Evaluation
     public class EvaluationRespository
     {
+        //Creating a method to add the details of Evaluation in the database
         public int AddEvaluation(EvaluationModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -35,6 +37,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Evaluations from the database
         public List<EvaluationModel> GetAllEvaluation()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -69,6 +72,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Evaluation from the database
         public EvaluationModel GetEvaluation(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -104,6 +108,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Evaluation from the database
         public bool UpdateEvaluation(int id, EvaluationModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -127,6 +132,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Evaluation from the database
         public bool DeleteEvaluation(int id)
         {
             using (var context = new ReviewZoneDBEntities())

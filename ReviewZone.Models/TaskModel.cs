@@ -11,8 +11,8 @@ namespace ReviewZone.Models
     {
 
         public int Task_ID { get; set; }
-        [Display(Name = "Employee Name")]
-        public int? Emp_ID { get; set; }
+        [Display(Name = "Evaluator Name")]
+        public int? Evaluator_ID { get; set; }
         [Display(Name = "Task Name")]
         public string TaskName { get; set; }
         public string Name { get; set; }
@@ -23,6 +23,7 @@ namespace ReviewZone.Models
         public string Status { get; set; }
         public string Description { get; set; }
 
+        public EvaluatorModel Evaluator { get; set; }
         public EmployeeModel Employee { get; set; }
         public EvaluationModel Evaluation { get; set; }
     }

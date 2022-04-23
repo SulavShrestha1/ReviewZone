@@ -29,7 +29,7 @@ namespace ReviewZone.Models
         [NotMapped]
         [Display(Name = "Unit Price")]
         [Required(ErrorMessage = "The Unit Price Field is Required")]
-        public int UnitPrice { get; set; }
+        public int Price { get; set; }
 
         [NotMapped]
         [Required(ErrorMessage = "The Quantity Field is Required")]

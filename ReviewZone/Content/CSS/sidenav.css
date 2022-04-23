@@ -81,7 +81,7 @@ a {
 }
 
 .nav {
-    height: 100%;
+    height: auto;
     display: flex;
     justify-content: space-between;
     overflow: hidden

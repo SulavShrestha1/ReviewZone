@@ -34,8 +34,8 @@ namespace ReviewZone.Models
         [Required(ErrorMessage = "The Date Field is Required")]
         public System.DateTime OrderDate { get; set; }
 
-        [Display(Name = "Payment Term")]
-        public string PaymentTerm { get; set; }
+        [Display(Name = "Due Date")]
+        public System.DateTime DueDate { get; set; }
 
         [Required(ErrorMessage = "The Created On Field is Required")]
         public System.DateTime? CreatedOn { get; set; }
@@ -44,6 +44,7 @@ namespace ReviewZone.Models
         public double? Sub_Total { get; set; }
         [Display(Name = "Discount")]
         public double? DiscountAmount { get; set; }
+        [NotMapped]
         [Display(Name = "Tax")]
         public double? TaxAmount { get; set; }
         public double? Total { get; set; }

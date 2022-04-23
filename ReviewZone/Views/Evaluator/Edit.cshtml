@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-hdr">
-                    <h2><span></span>Add New Evaluator</h2>
+                    <h2><span></span>Edit Evaluator</h2>
                     <div class="panel-toolbar">
                         <div class="btn-group">
                             <a href="@Url.Action("GetAllEvaluator", "Evaluator")" class="btn btn-secondary waves-effect waves-themed"> Cancel</a>
@@ -103,10 +103,11 @@
 </main>
 
 <script>
-    swal("Evaluator Updated!", "Evaluator Has Been Succesfully Updated!", "success")
-        .then(function () {
-            window.location = "/Evaluator/GetAllEvaluator";
-        });
+    function ShowSuccessMsg() {
+        swal("Evaluator Updated!", "Evaluator Has Been Succesfully Updated!", "success")
+            .then(function () {
+                window.location = "/Evaluator/GetAllEvaluator";
+            });
     }
 
     function ShowFailure() {
@@ -116,6 +117,7 @@
     function DeleteBtn() {
 
         var Evaluator_ID = $("#Evaluator_ID").val();
+        console.log(Evaluator_ID)
         swal({
             title: "Are you sure?",
             text: "Once deleted, you will not be able to recover this evaluator!",

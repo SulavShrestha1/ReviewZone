@@ -24,6 +24,9 @@ textarea {
     max-width: 280px;
 }
 */
+.pt-3 {
+    padding-top: 1rem !important;
+}
 
 @media only screen and (max-width: 992px) {
     .page-wrapper .page-sidebar .primary-nav {
@@ -213,6 +216,22 @@ hr {
     background-color: #0c83e2;
     border-color: #0c7cd5;
 }
+.btn-danger:hover {
+    color: #fff;
+    background-color: #9f2626 !important;
+    border-color: #952323 !important;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #536a89;
+    border-color: #4e6381;
+}
+.btn-info:hover {
+    color: #fff;
+    background-color: #0c83e2;
+    border-color: #0c7cd5;
+}
+
 
 .pos-bottom {
     bottom: 0;
@@ -443,6 +462,7 @@ mat-drawer-container {
     margin-top: 0px;
     padding-bottom: 89.5px;
     align-items: center;
+    justify-content: center
 }
 
 #employee {
@@ -450,6 +470,7 @@ mat-drawer-container {
     margin-top: 0px;
     padding-bottom: 89.5px;
     align-items: center;
+    justify-content: center
 }
 
 #task {
@@ -457,13 +478,15 @@ mat-drawer-container {
     margin-top: 0px;
     padding-bottom: 66.5px;
     align-items: center;
+    justify-content: center
 }
 
 #product {
     display: flex;
     margin-top: 0px;
-    padding-bottom: 28px;
+    padding-bottom: 88px;
     align-items: center;
+    justify-content: center
 }
 
 #dataTable {
@@ -841,4 +864,13 @@ textarea {
     width: 532px;
     height: 130px;
     border: 1px solid #e5e5e5 !important;
+}
+
+#center {
+    display: flex;
+    justify-content: center;
+}
+
+td, tr {
+    text-align: center;
 }

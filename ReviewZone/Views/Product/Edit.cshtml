@@ -6,7 +6,7 @@
 
 <link href="~/Content/CSS/Productcreate.css" rel="stylesheet" />
 <main id="clx-page-content" role="main" class="page-content ">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
 
@@ -18,8 +18,17 @@
                 <div class="panel">
                     <div class="panel-hdr">
                         <h2>
-                            Add Product
+                            Edit Product
                         </h2>
+                        <div class="panel-toolbar">
+                            <div class="btn-group">
+                                <a href="@Url.Action("GetAllProduct", "Product")" class="btn btn-secondary ml-3 waves-effect waves-themed">
+                                    <i class="fas fa-times">
+                                    </i>
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="panel-container" id="ibox_form">
@@ -142,13 +151,15 @@
                     <div class="panel-container">
                         <div class="panel-content">
                             <div class="panel-body" id="ibox_form">
-                                <h3>Image</h3>
+                                <h3>
+                                    <label for="Image" class="control-label h6 col-md-4">Image</label>
+                                </h3>
                                 <div class="hr-line-dashed"></div>
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <div class="col-md-10">
-                                            <img src="@Url.Content(Session["imgPath"].ToString())" height="300" width="500" onerror="this.onerror = null; this.src = '/Images/default_Product.png';" />
-                                            <input id="File" type="file" name="File" class="form-control" />
+                                            <img id="output" src="@Url.Content(Session["imgPath"].ToString())" height="450" width="600" onerror="this.onerror = null; this.src = '/Images/default_Product.png';" />
+                                            <input id="File" type="file" name="File" class="form-control" onchange="loadFile(event)" />
                                             @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -163,6 +174,15 @@
 </main>
 
 <script>
+
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src)
+        }
+    };
+
     function ShowSuccessMsg() {
         swal("Product Updated!", "Product Has Been Succesfully Updated!", "success")
             .then(function () {
@@ -173,7 +193,16 @@
     function ShowFailure() {
         swal("Invalid Inputs!", "Product Cannot Be Updated!", "error");
     }
+ 
 
+    function ShowSizeFailure() {
+        swal("Invalid Inputs!", "The file's size exceeded!", "error");
+    }
+
+
+    function ShowFileTypeFailure() {
+        swal("Invalid Inputs!", "The file should just of .jpg,.jpeg or .png extension !", "error");
+    }
     function DeleteBtn() {
 
         var ItemNumber = $("#ItemNumber").val();

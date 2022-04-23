@@ -7,143 +7,211 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows;
 
 namespace ReviewZone.Controllers
 {
+    //Controller class for Order
     [Authorize]
     public class OrderController : Controller
     {
+        //Connection to Database
         ReviewZoneDBEntities db = new ReviewZoneDBEntities();
 
+        //Connection to Database Queries(respository) for Order
         OrderRepository repository;
+
+        //Creating a constructor to access the repository easily
         public OrderController()
         {
             repository = new OrderRepository();
         }
 
+        //Creating a public method to access(GET) the list of Orders from the database
         public List<Order> GetOrder()
         {
-            List<Order> orderList = db.Order.ToList();
-            return orderList;
+            try
+            {
+                List<Order> orderList = db.Order.ToList();
+                return orderList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a public method to access(GET) the list of customers from the database
         public List<Customer> GetCustomer()
         {
-            List<Customer> customerList = db.Customer.ToList();
-            return customerList;
+            try
+            {
+                List<Customer> customerList = db.Customer.ToList();
+                return customerList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a public method to access(GET) the list of employees from the database
         public List<Employee> GetEmployee()
         {
-            List<Employee> employeetList = db.Employee.ToList();
-            return employeetList;
+            try
+            {
+                List<Employee> employeetList = db.Employee.ToList();
+                return employeetList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a public method to access(GET) the list of products from the database
         public List<Product> GetProduct()
         {
-            List<Product> productList = db.Product.ToList();
-            return productList;
+            try
+            {
+                List<Product> productList = db.Product.ToList();
+                return productList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to display a view for Order
         public ActionResult Create()
         {
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-            ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
+            try
+            {
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
 
-            var status = new List<string>() { "Pending", "Active" };
-            ViewBag.statusList = status;
-            
-            var billing = new List<string>() { "Free Account", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
-            ViewBag.billingList = billing;
-            return View();
+                var status = new List<string>() { "Pending", "Active" };
+                ViewBag.statusList = status;
+
+                var billing = new List<string>() { "Free Order", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
+                ViewBag.billingList = billing;
+                return View();
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
- 
+        //Creating a json result method to insert details of Order
         [HttpPost]
         public JsonResult Create(OrderModel model)
         {
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-            ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
-
-            var status = new List<string>() { "Pending", "Active" };
-            ViewBag.statusList = status;
-
-
-            var billing = new List<string>() { "Free Account", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
-            ViewBag.billingList = billing;
-
-            if (ModelState.IsValid)
+            try
             {
-                int id = repository.AddOrder(model);
-                if (id > 0)
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
+
+                var status = new List<string>() { "Pending", "Active" };
+                ViewBag.statusList = status;
+
+
+                var billing = new List<string>() { "Free Order", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
+                ViewBag.billingList = billing;
+
+                if (ModelState.IsValid)
                 {
-                    ModelState.Clear();
-                    return Json(new { success = true, responseText = "Order Successfully Created!" }, JsonRequestBehavior.AllowGet);
+                    int id = repository.AddOrder(model);
+                    if (id > 0)
+                    {
+                        ModelState.Clear();
+                        return Json(new { success = true, responseText = "Order Successfully Created!" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                    }
                 }
                 else
                 {
                     ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
                 }
+                return Json(new { success = false, responseText = "The order cannot be created." }, JsonRequestBehavior.AllowGet);
             }
-            else
-            {
-                ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
-            }
-            return Json(new { success = false, responseText = "The order cannot be created." }, JsonRequestBehavior.AllowGet);
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to access(GET) the list of Orders from the database
         public ActionResult GetAllOrder()
         {
-            var result = repository.GetAllOrder();
-            return View(result);
+            try
+            {
+                var result = repository.GetAllOrder();
+                return View(result);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+
+        //Creating a action result method to access(GET) the list of OrderDetails from the database
         private ActionResult GetAllOrderDetails(int id)
         {
-            var result = repository.GetAllOrderDetails(id);
-            return View(result);
+            try
+            {
+                var result = repository.GetAllOrderDetails(id);
+                return View(result);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to access(GET) the detail of individual Order from the database
         public ActionResult Details(int id)
         {
-            var order = repository.GetOrder(id);
-            var OrderDEtails = repository.GetAllOrderDetails(id);
-            order.ItemDetails = OrderDEtails;
-            return View(order);
+            try
+            {
+                var order = repository.GetOrder(id);
+                var OrderDEtails = repository.GetAllOrderDetails(id);
+                order.ItemDetails = OrderDEtails;
+                return View(order);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to display the view to edit an Order
         public ActionResult Edit(int id)
         {
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-            ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
+            try
+            {
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
 
-            var status = new List<string>() { "Pending", "Active" };
-            ViewBag.statusList = status;
+                var status = new List<string>() { "Pending", "Active", "Cancelled" };
+                ViewBag.statusList = status;
 
-            var billing = new List<string>() { "Free Account", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
-            ViewBag.billingList = billing;
-            var order = repository.GetOrder(id);
-            var OrderDEtails = repository.GetAllOrderDetails(id);
-            order.ItemDetails = OrderDEtails;
-            return View(order);
+                var billing = new List<string>() { "Free Order", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
+                ViewBag.billingList = billing;
+                var order = repository.GetOrder(id);
+                var OrderDetails = repository.GetAllOrderDetails(id);
+                order.ItemDetails = OrderDetails;
+                return View(order);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to edit an Order from the database
         [HttpPost]
-        public ActionResult Edit(OrderModel model)
+        public JsonResult Edit(OrderModel model)
         {
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-            ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
-            var status = new List<string>() { "Pending", "Active" };
-            ViewBag.statusList = status;
+            try
+            {
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
+                var status = new List<string>() { "Pending", "Active", "Cancelled" };
+                ViewBag.statusList = status;
 
 
-            var billing = new List<string>() { "Free Account", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
-            ViewBag.billingList = billing;
-
+                var billing = new List<string>() { "Free Order", "One Time", "Monthly", "Quarterly", "Semi-Annually", "Annually", "Biennially", "Triennially" };
+                ViewBag.billingList = billing;
                 repository.UpdateOrder(model.Order_ID, model);
                 foreach (var item in model.ItemDetails)
                 {
@@ -154,42 +222,51 @@ namespace ReviewZone.Controllers
                         if (id > 0)
                         {
                             ModelState.Clear();
-                            ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
-                            return View(model.Order_ID);
-                        }
-                        else
-                        {
-                            ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                            return Json(model.Order_ID, JsonRequestBehavior.AllowGet);
                         }
                     }
                 }
+                return Json(model.Order_ID, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
 
-            return View(model.Order_ID);
         }
+
+        //Creating a json result method to delete an Order from the database
         [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int id)
+        public JsonResult Delete(int id)
         {
-            if (repository.DeleteOrder(id))
+            try
             {
-                return Json(new { success = true, responseText = "Poof! Order has been deleted!" }, JsonRequestBehavior.AllowGet);
+                if (repository.DeleteOrder(id))
+                {
+                    return Json(new { success = true, responseText = "Poof! Order has been deleted!" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, responseText = "The order cannot be deleted." }, JsonRequestBehavior.AllowGet);
+                }
             }
-            else
-            {
-                return Json(new { success = false, responseText = "The order cannot be deleted." }, JsonRequestBehavior.AllowGet);
-            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a json result method to delete an OrderDetails from the database
         public JsonResult DeleteOrderDetails(int id)
         {
+            try
+            {
+                if (repository.DeleteOrderDetails(id))
+                {
+                    return Json(data: "Success", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(data: "Failure");
+                }
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
 
-            if (repository.DeleteOrderDetails(id))
-            {
-                return Json(data: "Success", JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(data: "Failure");
-            }
         }
     }
 }

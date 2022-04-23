@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-hdr">
-                    <h2><span></span>Add New Task</h2>
+                    <h2><span></span>Edit Task</h2>
                     <div class="panel-toolbar">
                         <div class="btn-group">
                             <a href="@Url.Action("GetAllTask", "Task")" class="btn btn-secondary waves-effect waves-themed"> Cancel</a>
@@ -39,11 +39,11 @@
                                             </div>
                                             <div class="mb-3">
                                                 <div class="form-group">
-                                                    @Html.LabelFor(model => model.Emp_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                    @Html.LabelFor(model => model.Evaluator_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                     <div class="col-md-10">
 
-                                                        @Html.DropDownListFor(model => model.Emp_ID, ViewBag.employeeList as SelectList, "--Select Employee--", new { @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.Emp_ID, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.Evaluator.FullName, ViewBag.evaluatorList as SelectList, "--Select Evaluator--", new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Evaluator_ID, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                                 <span class="help-block"><a href="#" id="contact_add">| Or Add New Employee</a> </span>

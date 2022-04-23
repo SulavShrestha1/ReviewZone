@@ -278,6 +278,12 @@ namespace ReviewZone
             );
             
             routes.MapRoute(
+                name: "SalesForecast",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "SalesForecast", action = "Index", id = UrlParameter.Optional }
+            );
+            
+            routes.MapRoute(
                 name: "ExpenseReport",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Report", action = "ExpenseReports", id = UrlParameter.Optional }

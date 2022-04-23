@@ -12,76 +12,67 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
+using System.Windows;
 using WebMatrix.WebData;
 
 namespace ReviewZone.Controllers
 {
+    //Controller class for Login
     public class AccountLoginController : Controller
     {
-
+        //Connection to Database
         ReviewZoneDBEntities db = new ReviewZoneDBEntities();
-        // GET: Login
+
+        //Creating a action result method to display a view for Login
         public ActionResult Login()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Login(AccountLoginModel model)
-        {
-            using (var context = new ReviewZoneDBEntities())
+            try
             {
-                bool isvalid = context.AccountLogin.Any(x => x.UserName == model.UserName && x.Password == model.Password);
-
-                if (isvalid)
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, false);
-                    TempData["msg"] = "<script>alert('Login Successful, Hello'+  Username+');</script>";
-                    return RedirectToAction("Index", "Home");
-                }
                 return View();
             }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
-        public ActionResult Logout()
-        {
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
-        }
-
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
-
+        //Creating a action result method to insert details of Login
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ChangePassword(AccountLoginModel model)
-        {
-            using (var context = new ReviewZoneDBEntities())
+        public ActionResult Login(AccountLoginModel model)
+        {   
+            try
             {
-                //User.Identity; // in the controller
-                //HttpContext.User.Identity; // in the controller
-                //System.Web.HttpContext.Current.User.Identity; // anywhere
-                string userName = HttpContext.User.Identity.Name;
-                string userid = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                bool isvalid = context.AccountLogin.Any(x => x.UserName == userName && x.Password == model.CurrentPassword);
-
-                if (isvalid)
+                using (var context = new ReviewZoneDBEntities())
                 {
-                    var acc = new AccountLogin();
-
-                    acc.Login_ID = model.Login_ID;
-                    acc.Password = model.Password;
-
-                    context.Entry(acc).State = System.Data.Entity.EntityState.Modified;
-                    context.SaveChanges();
-                    ModelState.Clear();
-                    TempData["msg"] = "<script>alert('Data Successfully Added');</script>";
-                    return RedirectToAction("Index","Home");
+                    bool isvalid = context.AccountLogin.Any(x => x.UserName == model.UserName && x.Password == model.Password);
+                    if (model.UserName !=null && model.Password != null)
+                    {
+                        if (isvalid)
+                        {
+                            FormsAuthentication.SetAuthCookie(model.UserName, false);
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                            return View();
+                        }
+                    }
+                    return View();
                 }
             }
-            return View();
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
+        }
+
+        //Creating a action result method to logout from the system
+        public ActionResult Logout()
+        {
+            try
+            {
+                FormsAuthentication.SignOut();
+                return RedirectToAction("Login");
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
     }
 }

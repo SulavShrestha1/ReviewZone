@@ -19,7 +19,7 @@
                         <div class="panel-toolbar">
                             <input type="hidden" name="invoice_id" value="">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-primary mt-3 mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
+                                <button class="btn btn-sm btn-primary mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
                                     <i class="fas fa-save">
                                     </i>
                                     Save
@@ -28,7 +28,7 @@
                                 {
                                     if (User.IsInRole("admin"))
                                     {
-                                        <a onclick="DeleteBtn()" class="btn btn-danger mt-3 mr-3 ml-3 waves-effect waves-themed has-tooltip">
+                                        <a onclick="DeleteBtn()" class="btn btn-danger mr-3 ml-3 waves-effect waves-themed has-tooltip">
                                             <i class="fas fa-trash-alt">
                                             </i>
                                             Delete
@@ -79,7 +79,7 @@
                                                     <div class="form-group">
                                                         @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                         <div class="col-md-10">
-                                                            @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.statusList), new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
@@ -138,10 +138,10 @@
                                             <div class="col-sm-4">
                                                 <div class="mb-3">
                                                     <div class="form-group">
-                                                        @Html.LabelFor(model => model.PaymentTerm, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                        @Html.LabelFor(model => model.DueDate, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                         <div class="col-md-10">
-                                                            @Html.DropDownListFor(model => model.PaymentTerm, new SelectList(ViewBag.paymentTermList), new { @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.PaymentTerm, "", new { @class = "text-danger" })
+                                                            @Html.EditorFor(model => model.DueDate, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+                                                            @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>
                                                 </div>
@@ -252,22 +252,28 @@
                                             <tbody>
                                                 <tr>
                                                     <td><strong>Sub Total :</strong></td>
-                                                    <td class="amount">$ @Html.DisplayFor(model => model.Sub_Total, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                    <td class="amount">
+                                                        @Html.EditorFor(model => model.Sub_Total, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <strong>Discount <span id="is_pt"></span> : </strong>
                                                     </td>
-                                                    <td class="amount">$ @Html.DisplayFor(model => model.DiscountAmount, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                    <td class="amount">
+                                                        @Html.EditorFor(model => model.DiscountAmount, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>TAX :</strong></td>
-                                                    <td id="taxtotal" class="amount">$ 0.00</td>
+                                                    <td id="taxtotal" class="amount">
+                                                        @Html.EditorFor(model => model.TaxAmount, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td><strong>TOTAL :</strong></td>
                                                     <td class="amount">
-                                                        $ @Html.DisplayFor(model => model.Total, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control no-border", @readonly = "readonly" } })
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -287,66 +293,83 @@
 
 <script>
     $(document).ready(function () {
+        var Tax = 0.00;
+        $("#TaxAmount").val(Tax.toFixed(2))
 
         $("#Quantity,#Price").change(function () {
-            var q = parseInt($("#Quantity").val());
-            var p = parseInt($("#Price").val());
-
+            var q = parseFloat($("#Quantity").val());
+            var p = parseFloat($("#Price").val());
             var t = (q * p);
             $("#Tot").val(t);
 
         });
 
         $("#Discount").change(function () {
-            var d = parseInt($("#Discount").val());
-            var tt = parseInt($("#Tot").val());
+            var d = parseFloat($("#Discount").val());
+            var tt = parseFloat($("#Tot").val());
             var tot = (tt - ((d / 100) * tt));
             $("#Tot").val(tot);
         });
 
         $("#btnAdd").click(function (e) {
             e.preventDefault();
-            $("#invoice_items").append("<tr><td></td><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Quantity').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Discount').val() + "</td><td>" + $('#Tax').val() + "</td><td>" + $('#Tot').val() + `</td><td><button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
-            var TotalAmount = 0;
-            var Sub_Total = 0;
-            var Discount = 0;
+            $("#invoice_items").append("<tr><td></td><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Quantity').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Discount').val() + "</td><td>" + $('#Tax').val() + "</td><td>" + $('#Tot').val() + `</td><td><button type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+            calculations();
+
+        });
+
+
+        function calculations() {
+            var TotalAmount = 0.00;
+            var Sub_Total = 0.00;
+            var Discount = 0.00;
+
+            console.log(TotalAmount, Sub_Total, Discount)
+
             $('#invoice_items tr').each(function (index, tr) {
                 $(tr).each(function () {
-                    var $tr = $(this);
-                    var $Quantity = $tr.find('td:eq(1)').text().trim() != "" ? parseInt($tr.find('td:eq(1)').text().trim()) : 0;
-                    var $Price = $tr.find('td:eq(2)').text().trim() != "" ? parseInt($tr.find('td:eq(2)').text().trim()) : 0;
-                    var $Discount = $tr.find('td:eq(3)').text().trim() != "" ? parseInt($tr.find('td:eq(3)').text().trim()) : 0;
-                    var $TotalAmount = $tr.find('td:eq(5)').text().trim() != "" ? parseInt($tr.find('td:eq(5)').text().trim()) : 0;
 
+                    var $Quantity = $(tr).find('td:eq(2)').text();
+                    console.log($Quantity)
+                    var $Price = $(tr).find('td:eq(3)').text();
+                    console.log($Price)
+                    var $Discount = $(tr).find('td:eq(4)').text();
+                    console.log($Discount)
+                    var $TotalAmount = $(tr).find('td:eq(6)').text();
+                    console.log($TotalAmount)
                     var $subtotal = 0;
                     var $discount = 0;
 
                     $subtotal = $Quantity * $Price;
+                    console.log($subtotal)
 
-                    $discount = $subtotal - (($Discount / 100) * $subtotal);
+                    $discount = (($Discount / 100) * $subtotal);
 
                     Discount += $discount;
 
                     Sub_Total += $subtotal;
 
-                    TotalAmount += $TotalAmount;
+                    TotalAmount += Number($TotalAmount);
+
+                    $("#Quantity").val(0);
+                    $("#Price").val(0);
+                    $("#Discount").val(0);
+                    $("#Tot").val(0);
 
                 });
             });
             $("#Sub_Total").val(Sub_Total.toFixed(2))
             $("#DiscountAmount").val(Discount.toFixed(2))
-            $("#Total").val(TotalAmount.toFixed(2))
 
-            console.log($("#Sub_Total").val(Sub_Total.toFixed(2)))
-            console.log($("#Discount_Amount").val(Discount.toFixed(2)))
-            console.log($("#Total").val(TotalAmount.toFixed(2)))
-        });
+            $("#Total").val(TotalAmount.toFixed(2))
+        }
 
         $("#invoice_items").on('click', '#btnRemove', function () {
             var InvoiceDetailsID = $(this).closest("tr").find("td:eq(0) input").val();
             let confirmAction = confirm("Are you sure to Delete");
             if (confirmAction) {
                 $(this).closest('tr').remove();
+                calculations();
                 $.ajax({
                     type: "Post",
                     url: '/Invoice/DeleteInvoiceDetails?id=' + InvoiceDetailsID,
@@ -406,9 +429,13 @@
         var Address = $("#Address").val();
         var OrderDate = $("#OrderDate").val();
         var CreatedOn = $("#CreatedOn").val();
-        var PaymentTerm = $("#PaymentTerm").val();
+        var DueDate = $("#DueDate").val();
+        var Sub_Total = $("#Sub_Total").val();
+        var DiscountAmount = $("#DiscountAmount").val();
+        var TaxAmount = $("#TaxAmount").val();
+        var Total = $("#Total").val();
 
-        console.log(listOfInvoiceDetailsModel);
+
         listOfInvoiceDetailsModel.shift();
 
         var model = {
@@ -421,10 +448,13 @@
             "Address": Address,
             "OrderDate": OrderDate,
             "CreatedOn": CreatedOn,
-            "PaymentTerm": PaymentTerm
+            "DueDate": DueDate,
+            "Sub_Total": Sub_Total,
+            "DiscountAmount": DiscountAmount,
+            "TaxAmount": TaxAmount,
+            "Total": Total,
         }
 
-        console.log(model);
 
         $.ajax({
             type: "Post",
@@ -433,12 +463,25 @@
             /*            datatype: "json",*/
             cache: false,
             contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                    swal("Invoice Updated!", "Invoice Has Been Succesfully Updated!", "success")
+                    .then(function () {
+                        window.location = '@Url.Action("GetAllInvoice", "Invoice")';
+                    });
+            },
+            error: function (xhr) {
+                swal("Cannot Be Updated!", response.responseText, "error");
+            }
         });
 
     }
 
     const myDatePicker = MCDatepicker.create({
-        el: '#OrderDate',
+        el: '#OrderDate'
+    })
+
+    const myDatePicker2 = MCDatepicker.create({
+        el: '#DueDate',
     })
     function ShowSuccessMsg() {
         swal("Invoice Updated!", "Invoice Has Been Succesfully Updated!", "success")

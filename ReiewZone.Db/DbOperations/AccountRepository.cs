@@ -7,8 +7,10 @@ using System.Linq;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for account
     public class AccountRepository
     {
+        //Creating a method to add the details of account in the database
         public int AddAccount(AccountModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -30,6 +32,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of account from the database
         public List<AccountModel> GetAllAccount()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -56,6 +59,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an account from the database
         public AccountModel GetAccount(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -81,6 +85,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an account from the database
         public bool UpdateAccount(int id, AccountModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -101,6 +106,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an account from the database
         public bool DeleteAccount(int id)
         {
             using (var context = new ReviewZoneDBEntities())

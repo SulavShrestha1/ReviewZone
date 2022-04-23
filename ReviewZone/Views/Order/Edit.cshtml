@@ -3,13 +3,13 @@
 @{ ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
 
-<link href="~Content/CSS/Ordercreate.css" rel="stylesheet" />
+<link href="~/Content/CSS/Ordercreate.css" rel="stylesheet" />
 <main id="clx-page-content" role="main" class="page-content ">
     <div class="row">
         <div class="col-md-12">
             <div class="panel" data-select2-id="6">
                 <div class="panel-hdr">
-                    <h2>Add New Order</h2>
+                    <h2>Edit Order</h2>
                 </div>
                 <div class="panel-container" id="ibox_form" data-select2-id="ibox_form">
                     <div class="panel-content" data-select2-id="5">
@@ -70,10 +70,10 @@
                                             </div>
                                             <div class="mb-3">
                                                 <div class="form-group">
-                                                    @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                     <div class="col-md-10">
-                                                        @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
-                                                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                                                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                                                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -117,7 +117,7 @@
                                                 @Html.LabelFor(model => model.Total, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                 <div class="col-md-10">
 
-                                                    @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control netProd" } })
+                                                    @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control netProd", @readonly = "readonly" } })
                                                     @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -144,16 +144,16 @@
                                                                 @Html.HiddenFor(modelItem => item.OrderDetailsID)
                                                             </td>
                                                             <td>
-                                                                @Html.DisplayFor(modelItem => item.ItemNumber, new { @class = "form-control" })
-                                                            </td>
-                                                            <td>
-                                                                @Html.DisplayFor(modelItem => item.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                                                @Html.DisplayFor(modelItem => item.Product.Name, new { @class = "form-control" })
                                                             </td>
                                                             <td>
                                                                 @Html.DisplayFor(modelItem => item.Price, new { htmlAttributes = new { @class = "form-control" } })
                                                             </td>
                                                             <td>
-                                                                <button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button>
+                                                                @Html.DisplayFor(modelItem => item.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button>
                                                             </td>
                                                         </tr>
 }
@@ -198,48 +198,42 @@
 <script>
     $(document).ready(function (e) {
 
-        //$("#Quantity,#Price").change(function () {
-        //    var q = parseInt($("#Quantity").val());
-        //    var p = parseInt($("#Price").val());
-
-        //    var t = (q * p);
-        //    $("#Total").val(t);
-
-        //});
-
 
         $("#btnAdd").click(function (e) {
             e.preventDefault();
-            $("#order_items").append("<tr><td></td><td>" + $('#ItemNumber').val() + "</td><td>" + $('#UnitPrice').val() + "</td><td>" + $('#Quantity').val() + "</td>" + `<td><button onClick="RemoveItem(this)" type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
-            //$('#order_items tr').each(function (index, tr) {
-            //    $(tr).each(function () {
-            //        var $tr = $(this);
-            //        var $Quantity = $tr.find('td:eq(1)').text().trim() != "" ? parseInt($tr.find('td:eq(1)').text().trim()) : 0;
-            //        var $Price = $tr.find('td:eq(2)').text().trim() != "" ? parseInt($tr.find('td:eq(2)').text().trim()) : 0;
-            //        var $Discount = $tr.find('td:eq(3)').text().trim() != "" ? parseInt($tr.find('td:eq(3)').text().trim()) : 0;
-            //        var $TotalAmount = $tr.find('td:eq(5)').text().trim() != "" ? parseInt($tr.find('td:eq(5)').text().trim()) : 0;
-
-            //        var $subtotal = 0;
-            //        var $discount = 0;
-            //        $subtotal = $Quantity * $Price;
-
-            //        $discount = $subtotal - (($Discount / 100) * $subtotal);
-
-            //        Discount += $discount;
-
-            //        Sub_Total += $subtotal;
-
-            //        TotalAmount += $TotalAmount;
-
-            //    });
-            //});
+            $("#order_items").append("<tr><td></td><td>" + $('#ItemNumber').val() + "</td><td>" + $('#Price').val() + "</td><td>" + $('#Quantity').val() + "</td>" + `<td><button type="button" class="btn btn-danger waves-effect waves-themed" id="btnRemove" style="display: block;"><i class="fas fa-minus-circle"></i> Delete</button></td></tr></body>`);
+            calculations();
         });
+
+        function calculations() {
+            var TotalAmount = 0;
+            $('#order_items tr').each(function (index, tr) {
+                $(tr).each(function () {
+
+                    var $Price = $(tr).find('td:eq(2)').text();
+
+                    var $Quantity = $(tr).find('td:eq(3)').text();
+
+                    $subtotal = $Quantity * $Price;
+
+                    TotalAmount += Number($subtotal);
+                    console.log(TotalAmount)
+
+                    $("#Price").val(0);
+                    $("#Quantity").val(0);
+
+                });
+            });
+
+            $("#Total").val(TotalAmount.toFixed(2))
+        }
 
         $("#order_items").on('click', '#btnRemove', function () {
             var OrderDetailsID = $(this).closest("tr").find("td:eq(0) input").val();
             let confirmAction = confirm("Are you sure to Delete");
             if (confirmAction) {
                 $(this).closest('tr').remove();
+                calculations();
                 $.ajax({
                     type: "Post",
                     url: '/Order/DeleteOrderDetails?id=' + OrderDetailsID,
@@ -265,12 +259,6 @@
             SaveRecords();
         });
 
-        //$(document).on('click', '#btnRemove', function (e) {
-        //    e.preventDefault();
-
-        //    let row = $(this).parent().parent().parent();
-        //    $(row).remove();
-        //});
     });
 
     function SaveRecords() {
@@ -280,9 +268,9 @@
             var obj = {}
 
             $(tr).each(function () {
-                obj['OrderDetailsID'] = $(tr).find('td:eq(0)').text();
+                obj['OrderDetailsID'] = $(tr).find('td:eq(0) input').val();
                 obj['ItemNumber'] = $(tr).find('td:eq(1)').text();
-                obj['UnitPrice'] = $(tr).find('td:eq(2)').text();
+                obj['Price'] = $(tr).find('td:eq(2)').text();
                 obj['Quantity'] = $(tr).find('td:eq(3)').text();
             });
             listOfOrderDetailsModel.push(obj);
@@ -312,17 +300,18 @@
         console.log(model);
         $.ajax({
             type: "Post",
-            url: "/Order/Create",
+            url: "/Order/Edit",
             data: JSON.stringify(model),
             cache: false,
             contentType: 'application/json; charset=utf-8',
-            success: function (data)  {
-
-                alert('Success');
-                window.location = '@Url.Action("Create", "Order")';
+            success: function (data) {
+                swal("Order Updated!", "Order Has Been Succesfully Updated!", "success")
+                    .then(function () {
+                        window.location = '@Url.Action("GetAllOrder", "Order")';
+                    });
             },
             error: function (xhr) {
-                alert('No Valid Data');
+                swal("Invalid Inputs!", "Order Cannot Be Updated!", "error");
             }
         });
     }
@@ -330,16 +319,6 @@
     const myDatePicker = MCDatepicker.create({
         el: '#Date',
     })
-
-    function ShowSuccessMsg() {
-        swal("Order Updated!", "Order Has Been Succesfully Updated!", "success")
-            .then(function () {
-                window.location = "/Order/GetAllOrderr";
-            });
-    }
-    function ShowFailure() {
-        swal("Invalid Inputs!", "Order Cannot Be Updated!", "error");
-    }
 
     function DeleteBtn() {
 

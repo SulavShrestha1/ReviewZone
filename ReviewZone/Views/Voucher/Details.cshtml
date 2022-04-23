@@ -11,18 +11,9 @@
             <div class="panel-container">
                 <div class="panel-content">
                     <div class="container">
-                        <h4 class="text-center">Account Details</h4>
+                        <h4 class="text-center">Voucher Details</h4>
                         <hr />
                         <ul class="dl-horizontal list-group-item-dark">
-                            <li class="list-group-item list-group-item-dark fw-bolder">
-                                @Html.DisplayNameFor(model => model.Voucher_No)
-                                : <i class="fas fa-arrow-down"></i>
-                            </li>
-
-                            <li class="list-group-item list-group-item-primary">
-                                @Html.DisplayFor(model => model.Voucher_No)
-                            </li>
-
                             <li class="list-group-item list-group-item-dark fw-bolder">
                                 @Html.DisplayNameFor(model => model.Title)
                                 : <i class="fas fa-arrow-down"></i>
@@ -74,7 +65,7 @@
                             </li>
 
                             <li class="list-group-item list-group-item-primary">
-                                @Html.DisplayFor(model => model.FromAccount)
+                                @Html.DisplayFor(model => model.Account.AccountTitle)
                             </li> 
                             
                             <li class="list-group-item list-group-item-dark fw-bolder">

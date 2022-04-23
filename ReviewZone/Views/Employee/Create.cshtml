@@ -119,7 +119,7 @@
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                         <div class="col-md-10">
-                                            @Html.DropDownListFor(model => model.Country, new SelectList(ViewBag.currList), "--Select Country--", new { @class = "form-control" })
+                                            @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <div class="col-md-10">
-                                            <img id="output" src="#" alt="your image" height="300" width="500" />
+                                            <img id="output" src="#" alt="your image" height="450" width="600" />
                                             <input id="File" type="file" name="File" class="form-control" onchange="loadFile(event)" />
                                             @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
                                         </div>
@@ -257,7 +257,14 @@
     function ShowFailure() {
         swal("Invalid Inputs!", "Employee Cannot Be Created!", "error");
     }
+    function ShowSizeFailure() {
+        swal("Invalid Inputs!", "The file's size exceeded!", "error");
+    }
 
+
+    function ShowFileTypeFailure() {
+        swal("Invalid Inputs!", "The file should just of .jpg,.jpeg or .png extension !", "error");
+    }
 
 
 </script>

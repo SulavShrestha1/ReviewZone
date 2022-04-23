@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReviewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Deposit
     public class DepositRepository
     {
+        //Creating a method to add the details of Deposit in the database
         public int AddDeposit(DepositModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -35,6 +37,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Deposit from the database
         public List<DepositModel> GetAllDeposit()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -68,6 +71,8 @@ namespace ReviewZone.Db.DbOperations
                 return result;
             }
         }
+
+        //Creating a method to access(GET) the details of an Deposit from the database
         public DepositModel GetDeposit(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -103,6 +108,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Deposit from the database
         public bool UpdateDeposit(int id, DepositModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -127,6 +133,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Deposit from the database
         public bool DeleteDeposit(int id)
         {
             using (var context = new ReviewZoneDBEntities())

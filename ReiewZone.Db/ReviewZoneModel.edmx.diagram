@@ -4,56 +4,55 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d1d6a8693f76495ca971a494c6464f66" Name="Diagram1" ZoomLevel="74">
-        <EntityTypeShape EntityType="ReviewZoneDBModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.AccountLogin" Width="1.5" PointX="3.375" PointY="0.875" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Admin" Width="1.5" PointX="5.625" PointY="31.5" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Customer" Width="1.5" PointX="5.625" PointY="11.875" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Evaluation" Width="1.5" PointX="7.875" PointY="20.75" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Evaluator" Width="1.5" PointX="5.625" PointY="28.5" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Invoice" Width="1.5" PointX="7.875" PointY="14.25" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.InvoiceDetails" Width="1.5" PointX="10.125" PointY="11" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Order" Width="1.5" PointX="10.875" PointY="14.875" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Product" Width="1.5" PointX="5.625" PointY="6.625" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.RoleType" Width="1.5" PointX="5.625" PointY="0.875" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.SalesForecast" Width="1.5" PointX="7.875" PointY="8.125" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Tasks" Width="1.5" PointX="5.625" PointY="17.125" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Voucher" Width="1.5" PointX="10.875" PointY="19.125" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_RoleType_Login" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Invoice_Customer" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Order_Customer" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Voucher_Prep" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluation_Evaluator" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluation_Task" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_ProductInvoice_Invoice" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_ProductInvoice_Product" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_SalesForecast_Product" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.OrderDetails" Width="1.5" PointX="13.125" PointY="11" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_OrderDetails_Order" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_ProductOrder_Product" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Account" Width="1.5" PointX="5.625" PointY="21.375" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Voucher_Account" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Employee" Width="1.5" PointX="3.375" PointY="16.875" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Account_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Admin_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Customer_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluation_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluator_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Invoice_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Order_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Product_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Tasks_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Voucher_Employee" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Deposit" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="ReviewZoneDBModel.Expense" Width="1.5" PointX="2.75" PointY="3.75" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Deposit_Account" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Expense_Account" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Deposit_Customer" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Expense_Customer" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Deposit_Employee" />
-        <AssociationConnector Association="ReviewZoneDBModel.FK_Expense_Employee" />
-        </Diagram>
-      <Diagram DiagramId="1ced08ca861f474995fdc32490fdfb80" Name="Diagram2" >
+      <Diagram DiagramId="ecb17b9ed87a4a74a0fdbadd7cad9567" Name="Diagram1" ZoomLevel="40">
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Account" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.AccountLogin" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Admin" Width="1.5" PointX="3" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Customer" Width="1.5" PointX="3" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Deposit" Width="1.5" PointX="5.25" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Employee" Width="1.5" PointX="0.75" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Evaluation" Width="1.5" PointX="8.25" PointY="26.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Evaluator" Width="1.5" PointX="3" PointY="27.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Expense" Width="1.5" PointX="8.25" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Invoice" Width="1.5" PointX="8.25" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.InvoiceDetails" Width="1.5" PointX="10.5" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Order" Width="1.5" PointX="5.25" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.OrderDetails" Width="1.5" PointX="7.5" PointY="31.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Product" Width="1.5" PointX="3" PointY="30.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.RoleType" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.SalesForecast" Width="1.5" PointX="5.25" PointY="32.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Tasks" Width="1.5" PointX="11.25" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ReviewZoneDBModel.Voucher" Width="1.5" PointX="5.25" PointY="21.125" IsExpanded="true" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Account_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Deposit_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Expense_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Voucher_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_RoleType_Login" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Admin_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Customer_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Deposit_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Expense_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Invoice_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Order_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Voucher_Prep" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Deposit_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluation_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluator_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Expense_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Invoice_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Order_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Product_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Tasks_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Voucher_Employee" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluation_Evaluator" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Evaluation_Task" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_Tasks_Evaluator" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_ProductInvoice_Invoice" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_ProductInvoice_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_OrderDetails_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_ProductOrder_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="ReviewZoneDBModel.FK_SalesForecast_Product" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

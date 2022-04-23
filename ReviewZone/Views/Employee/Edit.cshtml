@@ -16,7 +16,16 @@
                 <div class="panel">
                     <div class="panel-body">
                         <div class="panel-hdr">
-                            <h2>Add Employee</h2>
+                            <h2>Edit Employee</h2>
+                            <div class="panel-toolbar">
+                                <div class="btn-group">
+                                    <a href="@Url.Action("GetAllEmployee", "Employee")" class="btn btn-secondary ml-3 waves-effect waves-themed">
+                                        <i class="fas fa-times">
+                                        </i>
+                                        Cancel
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="panel-container">
                             <div class="panel-content">
@@ -121,7 +130,7 @@
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                         <div class="col-md-10">
-                                            @Html.DropDownListFor(model => model.Country, new SelectList(ViewBag.currList), "--Select Country--", new { @class = "form-control" })
+                                            @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control" } })
                                             @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -175,10 +184,6 @@
                                                         Save
                                                     </button>
 
-                                                    <button href="@Url.Action("GetAllEvaluation", "Employee")" class="btn btn-secondary mt-3 mr-3 waves-effect waves-themed">
-                                                        <i class="fas fa-times"></i>
-                                                        Cancel
-                                                    </button>
                                                 }
                                             }
                                         </div>
@@ -199,7 +204,7 @@
                             {
                                 if (User.IsInRole("admin"))
                                 {
-                                    <a onclick="DeleteBtn()" class="btn btn-danger mt-3 mr-3 ml-3 waves-effect waves-themed has-tooltip">
+                                    <a onclick="DeleteBtn()" class="btn btn-danger mr-3 ml-3 waves-effect waves-themed has-tooltip">
                                         <i class="fas fa-trash-alt">
                                         </i>
                                         Delete
@@ -220,8 +225,8 @@
                                 <div class="mb-3">
                                     <div class="form-group">
                                         <div class="col-md-10">
-                                            <img src="@Url.Content(Session["imgPath"].ToString())" height="300" width="500" onerror="this.onerror = null; this.src = '/Images/default_Employee.png';" />
-                                            <input id="File" type="file" name="File" class="form-control" />
+                                            <img id="output" src="@Url.Content(Session["imgPath"].ToString())" height="450" width="600" onerror="this.onerror = null; this.src = '/Images/default_Employee.png';" />
+                                            <input id="File" type="file" name="File" class="form-control" onchange="loadFile(event)"/>
                                             @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
@@ -238,6 +243,13 @@
 </main>
 
 <script>
+    var loadFile = function (event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src)
+        }
+    };
     const myDatePicker = MCDatepicker.create({
         el: '#Date',
     })
@@ -251,6 +263,15 @@
 
     function ShowFailure() {
         swal("Invalid Inputs!", "Employee Cannot Be Updated!", "error");
+    }
+
+    function ShowSizeFailure() {
+        swal("Invalid Inputs!", "The file's size exceeded!", "error");
+    }
+
+
+    function ShowFileTypeFailure() {
+        swal("Invalid Inputs!", "The file should just of .jpg,.jpeg or .png extension !", "error");
     }
 
     function DeleteBtn() {

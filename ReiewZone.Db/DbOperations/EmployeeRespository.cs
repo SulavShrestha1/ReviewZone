@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Employee
     public class EmployeeRespository
     {
+        //Creating a method to add the details of Employee in the database
         public int AddEmployee(EmployeeModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -34,19 +36,14 @@ namespace ReiewZone.Db.DbOperations
                     Summary = model.Summary,
                     Image = model.Image,
                 };
-                //if(model.RoleType != null)
-                //{
-                //    emp.RoleType = new RoleType()
-                //    {
-                //        Category = "employee",
-                //    };
-                //}
                 context.Employee.Add(emp);
                 context.SaveChanges();
 
                 return emp.Emp_ID;
             }
         }
+
+        //Creating a method to access(GET) the list of Employees from the database
         public List<EmployeeModel> GetAllEmployee()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -78,6 +75,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Employee from the database
         public EmployeeModel GetEmployee(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -110,6 +108,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Employee from the database
         public bool UpdateEmployee(int id, EmployeeModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -142,6 +141,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Employee from the database
         public bool DeleteEmployee(int id)
         {
             using (var context = new ReviewZoneDBEntities())

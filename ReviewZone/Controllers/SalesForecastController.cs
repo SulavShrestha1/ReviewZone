@@ -4,25 +4,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows;
 
 namespace ReviewZone.Controllers
 {
+    //Controller class for SalesForecast
     [Authorize]
     public class SalesForecastController : Controller
     {
+        //Connection to Database
         ReviewZoneDBEntities db = new ReviewZoneDBEntities();
 
+        //Creating a public method to access(GET) the list of products from the database
         public List<Product> GetProduct()
         {
-            List<Product> productList = db.Product.ToList();
-            return productList;
+            try
+            {
+                List<Product> productList = db.Product.ToList();
+                return productList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
         // GET: SalesForecast
         public ActionResult Index()
         {
-            ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
-            return View();
+            try
+            {
+                ViewBag.productList = new SelectList(GetProduct(), "ItemNumber", "Name");
+                return View();
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
     }
 }

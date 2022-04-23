@@ -10,7 +10,16 @@
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-hdr">
-                    <h2><span></span>Add New Voucher</h2>
+                    <h2><span></span>Edit Voucher</h2>
+                    <div class="panel-toolbar">
+                        <div class="btn-group">
+                            <a href="@Url.Action("GetAllVoucher", "Voucher")" class="btn btn-secondary ml-3 waves-effect waves-themed">
+                                <i class="fas fa-times">
+                                </i>
+                                Cancel
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-container show" id="ibox_form">
                     <div class="panel-content">
@@ -57,7 +66,7 @@
                                                     <div class="form-group">
                                                         @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label h6 col-md-4" })
                                                         <div class="col-md-10">
-                                                            @Html.DropDownListFor(model => model.Currency, new SelectList(ViewBag.currList), new { @class = "form-control" })
+                                                            @Html.EditorFor(model => model.Currency, new { htmlAttributes = new { @class = "form-control" } })
                                                             @Html.ValidationMessageFor(model => model.Currency, "", new { @class = "text-danger" })
                                                         </div>
                                                     </div>

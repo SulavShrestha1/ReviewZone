@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace ReviewZone.Db.DbOperations
 {
+
+    //Creating a class to store all the methods for accesing the database for Evaluator
     public class EvaluatorRepository
     {
+        //Creating a method to add the details of Evaluator in the database
         public int AddEvaluator(EvaluatorModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -28,6 +31,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Evaluators from the database
         public List<EvaluatorModel> GetAllEvaluator()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -51,6 +55,7 @@ namespace ReviewZone.Db.DbOperations
                             Zip = x.Employee.Zip,
                             Country = x.Employee.Country,
                             PhoneNumber = x.Employee.PhoneNumber,
+                            Image = x.Employee.Image,
                         },
 
                     }).ToList();
@@ -59,6 +64,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Evaluator from the database
         public EvaluatorModel GetEvaluator(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -83,6 +89,7 @@ namespace ReviewZone.Db.DbOperations
                             Zip = x.Employee.Zip,
                             Country = x.Employee.Country,
                             PhoneNumber = x.Employee.PhoneNumber,
+                            Image = x.Employee.Image,
                         },
 
                     }).FirstOrDefault();
@@ -91,6 +98,7 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Evaluator from the database
         public bool UpdateEvaluator(int id, EvaluatorModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -108,6 +116,8 @@ namespace ReviewZone.Db.DbOperations
             }
         }
 
+
+        //Creating a method to Delete an Evaluator from the database
         public bool DeleteEvaluator(int id)
         {
             using (var context = new ReviewZoneDBEntities())

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Product
     public class ProductRepository
     {
+        //Creating a method to add the details of Product in the database
         public int AddProduct(ProductModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -37,6 +39,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Products from the database
         public List<ProductModel> GetAllProduct()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -64,6 +67,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Product from the database
         public ProductModel GetProduct(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -91,6 +95,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Product from the database
         public bool UpdateProduct(int id, ProductModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -117,6 +122,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Product from the database
         public bool DeleteProduct(int id)
         {
             using (var context = new ReviewZoneDBEntities())

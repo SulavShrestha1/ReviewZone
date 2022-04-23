@@ -9,8 +9,10 @@ using System.Windows;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Invoice
     public class InvoiceRepository
     {
+        //Creating a method to add the details of Invoice in the database
         public int AddInvoice(InvoiceModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -23,7 +25,7 @@ namespace ReiewZone.Db.DbOperations
                     Address = model.Address,
                     OrderDate = model.OrderDate,
                     CreatedOn = model.CreatedOn,
-                    PaymentTerm = model.PaymentTerm,
+                    DueDate = model.DueDate,
                     Emp_ID = model.Emp_ID,
                     Customer_ID = model.Customer_ID,
                     ItemNumber = model.ItemNumber,
@@ -53,7 +55,8 @@ namespace ReiewZone.Db.DbOperations
                 return inv.InvoiceNumber;
             }
         }
-        
+
+        //Creating a method to add the details of Invoice in the database
         public int AddInvoiceDetails(InvoiceDetailsModel model, int InvoiceNumber)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -77,6 +80,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to add the details of Invoice in the database
         public List<InvoiceModel> GetAllInvoice()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -90,7 +94,7 @@ namespace ReiewZone.Db.DbOperations
                         Address = x.Address,
                         OrderDate = x.OrderDate,
                         CreatedOn = x.CreatedOn,
-                        PaymentTerm = x.PaymentTerm,
+                        DueDate = x.DueDate,
                         Sub_Total = x.Sub_Total,
                         DiscountAmount = x.DiscountAmount,
                         Total = x.Total,
@@ -113,6 +117,8 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+
+        //Creating a method to add the details of InvoiceDetails in the database
         public List<InvoiceDetailsModel> GetAllInvoiceDetails(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -138,6 +144,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the details of an Invoice from the database
         public InvoiceModel GetInvoice(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -152,7 +159,7 @@ namespace ReiewZone.Db.DbOperations
                         Address = x.Address,
                         OrderDate = x.OrderDate,
                         CreatedOn = x.CreatedOn,
-                        PaymentTerm = x.PaymentTerm,
+                        DueDate = x.DueDate,
                         Sub_Total = x.Sub_Total,
                         DiscountAmount = x.DiscountAmount,
                         Total = x.Total,
@@ -178,6 +185,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Edit an Invoice from the database
         public bool UpdateInvoice(int id, InvoiceModel model)
         {
 
@@ -191,7 +199,7 @@ namespace ReiewZone.Db.DbOperations
                     inv.Address = model.Address;
                     inv.OrderDate = model.OrderDate;
                     inv.CreatedOn = model.CreatedOn;
-                    inv.PaymentTerm = model.PaymentTerm;
+                    inv.DueDate = model.DueDate;
                     inv.ItemNumber = model.ItemNumber;
                     inv.Customer_ID = model.Customer_ID;
                     inv.Emp_ID = model.Emp_ID;
@@ -206,6 +214,7 @@ namespace ReiewZone.Db.DbOperations
 
         }
 
+        //Creating a method to Delete an Invoice from the database
         public bool DeleteInvoice(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -229,7 +238,8 @@ namespace ReiewZone.Db.DbOperations
                 }
             }
         }
-        
+
+        //Creating a method to Delete an InvoiceDetails from the database
         public bool DeleteInvoiceDetails(int id)
         {
             using (var context = new ReviewZoneDBEntities())

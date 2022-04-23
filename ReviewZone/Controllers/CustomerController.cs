@@ -8,147 +8,194 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using System.Windows;
 
 namespace ReviewZone.Controllers
 {
+    //Controller class for Customer
     [Authorize]
     public class CustomerController : Controller
     {
+        //Connection to Database
         ReviewZoneDBEntities db = new ReviewZoneDBEntities();
 
+        //Connection to Database Queries(respository) for Customer
         CustomerRepository repository;
+
+        //Creating a constructor to access the repository easily
         public CustomerController()
         {
             repository = new CustomerRepository();
         }
 
+        //Creating a public method to access(GET) the list of Customers from the database
         public List<Customer> GetCustomer()
         {
-            List<Customer> customerList = db.Customer.ToList();
-            return customerList;
+            try
+            {
+                List<Customer> customerList = db.Customer.ToList();
+                return customerList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a public method to access(GET) the list of Employees from the database
         public List<Employee> GetEmployee()
         {
-            List<Employee> employeetList = db.Employee.ToList();
-            return employeetList;
+            try
+            {
+                List<Employee> employeetList = db.Employee.ToList();
+                return employeetList;
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to display a view for Customer
         public ActionResult Create()
         {
-            var group = new List<string>() { "None", "Default" };
-            ViewBag.groupList = group;
+            try
+            {
+                var group = new List<string>() { "None", "Default" };
+                ViewBag.groupList = group;
 
-            var curr = new List<string>() { "Nepal", "USA", "India", "France" };
-            ViewBag.currList = curr;
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
 
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                return View();
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
 
-            return View();
         }
 
+        //Creating a action result method to insert details of Customer
         [HttpPost]
         public ActionResult Create(CustomerModel model)
         {
-            var group = new List<string>() { "None", "Default" };
-            ViewBag.groupList = group;
-
-            var curr = new List<string>() { "Nepal", "USA", "India", "France" };
-            ViewBag.currList = curr;
-
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-            if (ModelState.IsValid)
+            try
             {
-                int id = repository.AddCustomer(model);
-                if (id > 0)
+                var group = new List<string>() { "None", "Default" };
+                ViewBag.groupList = group;
+
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                if (ModelState.IsValid)
                 {
-                    ModelState.Clear();
-                    ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                    int id = repository.AddCustomer(model);
+                    if (id > 0)
+                    {
+                        ModelState.Clear();
+                        ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                    }
+                    else
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                    }
                 }
                 else
                 {
                     ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
                 }
+                return View();
             }
-            else
-            {
-                ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
-            }
-            return View();
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to access(GET) the list of Customers from the database
         public ActionResult GetAllCustomer()
         {
-            var result = repository.GetAllCustomer();
-            return View(result);
+            try
+            {
+                var result = repository.GetAllCustomer();
+                return View(result);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to access(GET) the detail of individual Customer from the database
         public ActionResult Details(int id)
         {
-            var customer = repository.GetCustomer(id);
-            return View(customer);
+            try
+            {
+                var customer = repository.GetCustomer(id);
+                return View(customer);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
 
+        //Creating a action result method to display the view to edit an Customer
         public ActionResult Edit(int id)
         {
-            var group = new List<string>() { "None", "Default" };
-            ViewBag.groupList = group;
+            try
+            {
+                var group = new List<string>() { "None", "Default" };
+                ViewBag.groupList = group;
 
-            var curr = new List<string>() { "Nepal", "USA", "India", "France" };
-            ViewBag.currList = curr;
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
 
+                var customer = repository.GetCustomer(id);
+                return View(customer);
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
 
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-
-            var customer = repository.GetCustomer(id);
-            return View(customer);
         }
 
+        //Creating a action result method to edit an Customer from the database
         [HttpPost]
         public ActionResult Edit(CustomerModel model)
         {
-            var group = new List<string>() { "None", "Default" };
-            ViewBag.groupList = group;
-
-            var curr = new List<string>() { "Nepal", "USA", "India", "France" };
-            ViewBag.currList = curr; 
-
-            ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
-            ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
-            if (ModelState.IsValid)
+            try
             {
-                if (repository.UpdateCustomer(model.Customer_ID, model))
+                var group = new List<string>() { "None", "Default" };
+                ViewBag.groupList = group;
+
+                ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
+                ViewBag.customerList = new SelectList(GetCustomer(), "Customer_ID", "FullName");
+                if (ModelState.IsValid)
                 {
-                    ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
-                    return View();
+                    if (repository.UpdateCustomer(model.Customer_ID, model))
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                    }
+
                 }
                 else
                 {
                     ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
                 }
+                return View();
+            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
 
-            }
-            else
-            {
-                ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
-            }
-            return View();
         }
 
+        //Creating a json result method to delete an Customer from the database
         [Authorize(Roles = "Admin")]
         public JsonResult Delete(int id)
         {
-            if (repository.DeleteCustomer(id))
+            try
             {
-                return Json(new { success = true, responseText = "Poof! Your customer has been deleted!" }, JsonRequestBehavior.AllowGet);
+                if (repository.DeleteCustomer(id))
+                {
+                    return Json(new { success = true, responseText = "Poof! Your customer has been deleted!" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, responseText = "The customer cannot be deleted." }, JsonRequestBehavior.AllowGet);
+                }
             }
-            else
-            {
-                return Json(new { success = false, responseText = "The customer cannot be deleted." }, JsonRequestBehavior.AllowGet);
-            }
+            catch (Exception e) { MessageBox.Show(e.Message); return null; }
+
         }
     }
 }

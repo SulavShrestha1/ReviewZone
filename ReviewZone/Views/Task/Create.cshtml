@@ -38,11 +38,11 @@
                                                             </div>
                                                             <div class="mb-3">
                                                                 <div class="form-group">
-                                                                    @Html.LabelFor(model => model.Emp_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
+                                                                    @Html.LabelFor(model => model.Evaluator_ID, htmlAttributes: new { @class = "control-label h6  col-md-4" })
                                                                     <div class="col-md-10">
 
-                                                                        @Html.DropDownListFor(model => model.Emp_ID, ViewBag.employeeList as SelectList, "--Select Employee--", new { @class = "form-control" })
-                                                                        @Html.ValidationMessageFor(model => model.Emp_ID, "", new { @class = "text-danger" })
+                                                                        @Html.DropDownListFor(model => model.Evaluator_ID, ViewBag.evaluatorList as SelectList, "--Select Employee--", new { @class = "form-control" })
+                                                                        @Html.ValidationMessageFor(model => model.Evaluator_ID, "", new { @class = "text-danger" })
                                                                     </div>
                                                                 </div>
                                                                 <span class="help-block"><a href="@Url.Action("Create", "Employee")" id="contact_add">| Or Add New Employee</a> </span>

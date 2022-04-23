@@ -67,7 +67,11 @@
                                             <div class="row align-items-center justify-content-center">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <button class="btn btn-primary mt-3 mr-3 waves-effect waves-themed" type="button" id="submit" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Save</button>
+                                                        <button class="btn btn-primary mt-3 mr-3 waves-effect waves-themed" type="button" id="submit" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fas fa-check-double"></i> Generate</button>
+                                                        <a href="@Url.Action("Index", "Home")" class="btn btn-danger waves-effect waves-themed mt-3 has-tooltip">
+                                                            <i class="fas fa-backward"></i>
+                                                            Back to Home
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -81,11 +85,12 @@
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <input id="Forecast" />
+                                                             As per the data provided the forecast for the product in coming year is given below:
+                                                            <input id="Forecast" border="none" readonly />
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="button" class="btn btn-primary">Understood</button>
+                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Understood</button>
                                                         </div>
                                                     </div>
                                                 </div>

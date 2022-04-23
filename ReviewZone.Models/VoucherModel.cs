@@ -28,7 +28,7 @@ namespace ReviewZone.Models
         public string RepeatEvery { get; set; }
         public string Currency { get; set; }
         [Required(ErrorMessage = "The Amount Field is Required")]
-        public int Amount { get; set; }
+        public double Amount { get; set; }
 
         public string Category { get; set; }
 

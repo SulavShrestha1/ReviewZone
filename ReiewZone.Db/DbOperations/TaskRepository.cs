@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace ReiewZone.Db.DbOperations
 {
+    //Creating a class to store all the methods for accesing the database for Task
     public class TaskRepository
     {
+        //Creating a method to add the details of Task in the database
         public int AddTask(TaskModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -20,7 +22,7 @@ namespace ReiewZone.Db.DbOperations
                     DueDate = model.DueDate,
                     Status = model.Status,
                     Description = model.Description,
-                    Emp_ID = model.Emp_ID,
+                    Evaluator_ID = model.Evaluator_ID,
                     AssignedTo = model.AssignedTo,
 
                 };
@@ -31,6 +33,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to access(GET) the list of Tasks from the database
         public List<TaskModel> GetAllTask()
         {
             using (var context = new ReviewZoneDBEntities())
@@ -43,21 +46,21 @@ namespace ReiewZone.Db.DbOperations
                         DueDate = x.DueDate,
                         Status = x.Status,
                         Description = x.Description,
+                        Evaluator = new EvaluatorModel()
+                        {
+                            FullName = x.Evaluator.FullName,
+                        },
                         Employee = new EmployeeModel()
                         {
                             FullName = x.Employee.FullName,
                         },
-
-                        //Evaluation = new EvaluationModel()
-                        //{
-                        //    Evaluator = x.Employee.FullName,
-                        //},
                     }).ToList();
 
                 return result;
             }
         }
 
+        //Creating a method to access(GET) the details of an Task from the database
         public TaskModel GetTask(int id)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -71,21 +74,21 @@ namespace ReiewZone.Db.DbOperations
                         DueDate = x.DueDate,
                         Status = x.Status,
                         Description = x.Description,
+                        Evaluator = new EvaluatorModel()
+                        {
+                            FullName = x.Evaluator.FullName,
+                        },
                         Employee = new EmployeeModel()
                         {
                             FullName = x.Employee.FullName,
                         },
-
-                        //Evaluation = new EvaluationModel()
-                        //{
-                        //    Evaluator = x.Employee.FullName,
-                        //},
                     }).FirstOrDefault();
 
                 return result;
             }
         }
 
+        //Creating a method to Edit an Task from the database
         public bool UpdateTask(int id, TaskModel model)
         {
             using (var context = new ReviewZoneDBEntities())
@@ -97,7 +100,7 @@ namespace ReiewZone.Db.DbOperations
                 ord.DueDate = model.DueDate;
                 ord.Status = model.Status;
                 ord.Description = model.Description;
-                ord.Emp_ID= model.Emp_ID;
+                ord.Evaluator_ID = model.Evaluator_ID;
                 ord.AssignedTo = model.AssignedTo;
 
                 context.Entry(ord).State = System.Data.Entity.EntityState.Modified;
@@ -106,6 +109,7 @@ namespace ReiewZone.Db.DbOperations
             }
         }
 
+        //Creating a method to Delete an Task from the database
         public bool DeleteTask(int id)
         {
             using (var context = new ReviewZoneDBEntities())
