@@ -13,7 +13,13 @@
                     <h2>Evaluations</h2>
                     <div class="panel-toolbar">
                         <div class="btn-group">
-                            <a href="@Url.Action("Create", "Evaluation")" class="btn btn-sm btn-primary waves-effect waves-themed"> New Evaluation</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (User.IsInRole("admin") || User.IsInRole("evaluator"))
+                                {
+                                    <a href="@Url.Action("Create", "Evaluation")" class="btn btn-sm btn-primary waves-effect waves-themed"> New Evaluation</a>
+                                }
+                            }
                         </div>
                     </div>
                 </div>

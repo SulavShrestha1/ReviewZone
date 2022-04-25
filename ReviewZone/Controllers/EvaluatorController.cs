@@ -72,16 +72,26 @@ namespace ReviewZone.Controllers
                 ViewBag.employeeList = new SelectList(GetEmployee(), "Emp_ID", "FullName");
                 if (ModelState.IsValid)
                 {
-                    int id = repository.AddEvaluator(model);
-                    if (id > 0)
+                    Evaluator evaluator = db.Evaluator.Where(x => x.Emp_ID == model.Emp_ID).FirstOrDefault();
+                    if(evaluator != null)
                     {
-                        ModelState.Clear();
-                        ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                        ViewBag.JavaScriptFunction = string.Format("SameEvaluator();");
+
                     }
                     else
                     {
-                        ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                        int id = repository.AddEvaluator(model);
+                        if (id > 0)
+                        {
+                            ModelState.Clear();
+                            ViewBag.JavaScriptFunction = string.Format("ShowSuccessMsg();");
+                        }
+                        else
+                        {
+                            ViewBag.JavaScriptFunction = string.Format("ShowFailure();");
+                        }
                     }
+
                 }
                 else
                 {

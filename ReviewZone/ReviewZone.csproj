@@ -45,9 +45,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BeginCollectionItem, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\BeginCollectionItem.1.2.1.0\lib\net35\BeginCollectionItem.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -263,13 +260,6 @@
     <Compile Include="WebRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\angular-material.css" />
-    <Content Include="Content\angular-material.layout-attributes.css" />
-    <Content Include="Content\angular-material.layout-attributes.min.css" />
-    <Content Include="Content\angular-material.layouts.css" />
-    <Content Include="Content\angular-material.layouts.ie_fixes.css" />
-    <Content Include="Content\angular-material.layouts.min.css" />
-    <Content Include="Content\angular-material.min.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -286,8 +276,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Content\Chart.css" />
-    <Content Include="Content\Chart.min.css" />
     <Content Include="Content\CSS\Accountcreate.css" />
     <Content Include="Content\CSS\AccountList.css" />
     <Content Include="Content\CSS\ChangePassword.css" />
@@ -328,26 +316,12 @@
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />
     <Content Include="Rotativa\wkhtmltoimage.exe" />
     <Content Include="Rotativa\wkhtmltopdf.exe" />
-    <Content Include="Scripts\angular-animate.js" />
-    <Content Include="Scripts\angular-animate.min.js" />
-    <Content Include="Scripts\angular-aria.js" />
-    <Content Include="Scripts\angular-aria.min.js" />
-    <Content Include="Scripts\angular-material-mocks.js" />
-    <Content Include="Scripts\angular-material.js" />
-    <Content Include="Scripts\angular-material.min.js" />
-    <Content Include="Scripts\angular-mocks.js" />
-    <Content Include="Scripts\angular-route.js" />
-    <Content Include="Scripts\angular-route.min.js" />
-    <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\Chart.js" />
-    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\Client\assets\Images\cover-2-lg.png" />
     <Content Include="Scripts\Client\assets\Images\default_Employee.png" />
     <Content Include="Scripts\Client\assets\Images\logo.png" />
@@ -387,10 +361,6 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="Scripts\angular.min.js.map" />
-    <Content Include="Scripts\angular-route.min.js.map" />
-    <Content Include="Scripts\angular-animate.min.js.map" />
-    <Content Include="Scripts\angular-aria.min.js.map" />
     <Content Include="Content\sweetalert\sweet-alert.less" />
     <Content Include="Content\sweetalert\sweet-alert-combine.less" />
     <Content Include="Content\sweetalert\sweet-alert-animations.less" />
@@ -464,7 +434,6 @@
     <Content Include="Views\Evaluator\Create.cshtml" />
     <Content Include="Views\Evaluator\Edit.cshtml" />
     <Content Include="Views\Evaluator\GetAllEvaluator.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\SalesForecast\Index.cshtml" />
     <Content Include="Views\Expense\Create.cshtml" />
     <Content Include="Views\Expense\Edit.cshtml" />

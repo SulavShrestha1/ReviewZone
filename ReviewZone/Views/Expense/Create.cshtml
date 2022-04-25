@@ -26,7 +26,7 @@
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="mb-3 row">
                                                     <div class="form-group">
-                                                        @Html.LabelFor(model => model.Account_No, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                        @Html.LabelFor(model => model.Account_No, htmlAttributes: new { @class = "control-label h6 col-md-4" })
                                                         <div class="col-md-10">
                                                             @Html.DropDownListFor(model => model.Account_No, ViewBag.accountList as SelectList, "--Select Account--", new { @class = "form-control" })
                                                             @Html.ValidationMessageFor(model => model.Account_No, "", new { @class = "text-danger" })

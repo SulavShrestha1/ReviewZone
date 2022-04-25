@@ -61,23 +61,33 @@
                                         <div class="row align-items-center justify-content-center">
                                             <div class="col-md-6">
                                                 <div class="mb-3 mt-3">
-                                                    <button class="btn btn-primary mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
-                                                        <i class="fas fa-save">
-                                                        </i>
-                                                        Save
-                                                    </button>
+                                                    @if (User.Identity.IsAuthenticated)
+                                                    {
+                                                        if (User.IsInRole("admin"))
+                                                        {
+                                                            <button class="btn btn-primary mr-3 waves-effect waves-themed" value="Create" type="submit" id="submit">
+                                                                <i class="fas fa-save">
+                                                                </i>
+                                                                Save
+                                                            </button>
+                                                        }
+                                                    }
                                                     |
-                                                    <a href="@Url.Action("GetAllEvaluator", "Evaluator")">Or Cancel</a>
+                                                    <a href="@Url.Action("GetAllEvaluator", "Evaluator")"> Or Cancel </a >
+
                                                 </div>
+
                                             </div>
+
                                         </div>
+
                                     </form>
                                 }
                             </div>
 
                         </div>
-                    </div>
-                </div>
+                            </div>
+                            </div>
             </div>
         </div>
 </main>
@@ -89,6 +99,11 @@
 
     function ShowFailure() {
         swal("Invalid Inputs!", "Evaluator Cannot Be Created!", "error");
+    }
+
+
+    function SameEvaluator() {
+        swal("Evaluator Already Exists!", "Evaluator Cannot Be Created!", "error");
     }
 
 

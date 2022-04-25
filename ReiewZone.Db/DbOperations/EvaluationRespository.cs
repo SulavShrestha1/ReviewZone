@@ -59,11 +59,11 @@ namespace ReiewZone.Db.DbOperations
                         },
                         Evaluator = new EvaluatorModel()
                         {
-                            FullName = x.Employee.FullName,
+                            FullName = x.Evaluator.Employee.FullName,
                         },
                         Task = new TaskModel()
                         {
-                            TaskName = x.Employee.FullName,
+                            TaskName = x.Tasks.TaskName,
                         },
 
                     }).ToList();
@@ -95,11 +95,11 @@ namespace ReiewZone.Db.DbOperations
                         },
                         Evaluator = new EvaluatorModel()
                         {
-                            FullName = x.Employee.FullName,
+                            FullName = x.Evaluator.Employee.FullName,
                         },
                         Task = new TaskModel()
                         {
-                            TaskName = x.Employee.FullName,
+                            TaskName = x.Tasks.TaskName,
                         },
 
                     }).FirstOrDefault();

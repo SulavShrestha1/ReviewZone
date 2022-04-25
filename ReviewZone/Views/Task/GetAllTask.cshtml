@@ -11,12 +11,18 @@
             <div class="panel">
                 <div class="panel-hdr">
                     <h2>List Tasks</h2>
-                    <div class="panel-toolbar">
-                        <div class="btn-group">
-                            @Html.ActionLink("Add Task", "Create", null,
-                            new { @class = "btn btn-sm btn-primary waves-effect waves-themed" })
-                        </div>
-                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("admin") || User.IsInRole("evaluator"))
+                        {
+                            <div class="panel-toolbar">
+                                <div class="btn-group">
+                                    @Html.ActionLink("Add Task", "Create", null,
+                              new { @class = "btn btn-sm btn-primary waves-effect waves-themed" })
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
                 <div class="panel-container show">
                     <div class="panel-content">
@@ -75,7 +81,7 @@
                                                             <a href="@Url.Action("Details", "Task", new { id = item.Task_ID })" class="btn btn-info btn-icon waves-effect waves-themed has-tooltip">
                                                                 <i class="fas fa-tasks">
                                                                 </i>
-                                                            </a> 
+                                                            </a>
 
                                                         </td>
                                                     </tr>

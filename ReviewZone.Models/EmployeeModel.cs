@@ -21,7 +21,7 @@ namespace ReviewZone.Models
         [Display(Name = "Secondary Email")]
         public string SecondaryEmail { get; set; }
         [Display(Name = "Phone Number")]
-        [RegularExpression(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$", ErrorMessage = "Phone Number is Invalid")]
+        [RegularExpression(@"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$", ErrorMessage = "Phone Number is Invalid")]
         public string PhoneNumber { get; set; }
         public string Department { get; set; }
 
